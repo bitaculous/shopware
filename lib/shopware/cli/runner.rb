@@ -2,8 +2,8 @@ require 'pp'
 require 'terminal-table'
 require 'thor'
 
-require_relative 'config'
-require_relative '../api/client'
+require 'shopware/api/client'
+require 'shopware/cli/config'
 
 module Shopware
   module CLI
