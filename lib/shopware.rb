@@ -1,0 +1,3 @@
+module Shopware
+  # Your code goes here...
+end
