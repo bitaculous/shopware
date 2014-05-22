@@ -14,7 +14,9 @@ module Shopware
       end
 
       def categories
-        self.class.get '/categories'
+        response = self.class.get '/categories'
+
+        response['success'] ? response['data'] : []
       end
     end
   end

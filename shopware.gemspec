@@ -27,6 +27,9 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'httparty', '~> 0.13.1'
 
+  spec.add_dependency 'term-ansicolor', '~> 1.3.0'
+  spec.add_dependency 'terminal-table', '~> 1.4.5'
+
   spec.add_development_dependency 'bundler', '~> 1.6.2'
 
   spec.add_development_dependency 'rake', '~> 10.3.2'
