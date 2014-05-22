@@ -9,8 +9,15 @@ module Shopware
   module CLI
     class Runner < Thor
       include Thor::Actions
+      include Thor::Shell
 
       include Config
+
+      desc 'import <file>', 'Import products from CSV file'
+      method_options verbose: false
+      def import(file)
+        say 'Hello', :red
+      end
 
       desc 'categories', 'List categories'
       def categories
