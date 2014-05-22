@@ -19,5 +19,8 @@
 # Ignore `Gemfile.lock`
 Gemfile.lock
 
+# Ignore `data` folder
+data
+
 # Ignore `pkg` folder
 pkg
