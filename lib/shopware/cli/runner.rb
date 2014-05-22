@@ -2,6 +2,7 @@ require 'pp'
 require 'terminal-table'
 require 'thor'
 
+require_relative 'config'
 require_relative '../api/client'
 
 module Shopware
@@ -9,7 +10,7 @@ module Shopware
     class Runner < Thor
       include Thor::Actions
 
-      CONFIG = '.shopware'
+      include Config
 
       desc 'categories', 'List categories'
       def categories
@@ -39,18 +40,6 @@ module Shopware
 
           puts table
         end
-      end
-
-      private
-
-      def options
-        original_options = super
-
-        return original_options unless File.exists? CONFIG
-
-        defaults = ::YAML::load_file CONFIG || {}
-
-        Thor::CoreExt::HashWithIndifferentAccess.new defaults.merge(original_options) if defaults
       end
     end
   end
