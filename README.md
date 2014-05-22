@@ -32,7 +32,7 @@ Usage
       base_uri: "http://your-awesome-shop.com/api"
     ```
 
-2. Run `shopware --help`
+2. Run `shopware --help` or `shopware help <command>`
 
 License
 -------
