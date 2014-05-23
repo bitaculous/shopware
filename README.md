@@ -34,6 +34,18 @@ Usage
 
 2. Run `shopware --help` or `shopware help <command>`
 
+### List categories
+
+```
+$ shopware categories
+```
+
+### Import products as a CSV file
+
+```
+$ shopware import <file>
+```
+
 License
 -------
 
