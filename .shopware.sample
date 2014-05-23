@@ -4,5 +4,5 @@ api:
   base_uri: "http://your-awesome-shop.com/api"
 
 import:
-  column_separator: ";"
+  column_separator: "|"
   quote_character: '"'
