@@ -2,7 +2,11 @@ module Shopware
   module CLI
     module Shell
       def info(message)
-        say message, :white if message
+        say message, :blue if message
+      end
+
+      def ok(message)
+        say message, :green if message
       end
 
       def warning(message)
