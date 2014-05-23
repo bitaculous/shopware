@@ -19,16 +19,15 @@ module Shopware
                 children_count = category['childrenCount']
                 article_count  = category['articleCount']
 
-                rows = []
-                rows << ['ID', id]                         if id
-                rows << ['Name', name]                     if name
-                rows << ['Active', active]                 if active
-                rows << ['Position', position]             if position
-                rows << ['Parent ID', parent_id]           if parent_id
-                rows << ['Children count', children_count] if children_count
-                rows << ['Article count', article_count]   if article_count
-
-                table = ::Terminal::Table.new rows: rows
+                table = Terminal::Table.new headings: ['Property', 'Value'] do |t|
+                  t << ['ID', id]                         if id
+                  t << ['Name', name]                     if name
+                  t << ['Active', active]                 if active
+                  t << ['Position', position]             if position
+                  t << ['Parent ID', parent_id]           if parent_id
+                  t << ['Children count', children_count] if children_count
+                  t << ['Article count', article_count]   if article_count
+                end
 
                 puts table
               end
