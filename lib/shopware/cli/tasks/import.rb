@@ -1,4 +1,8 @@
 require 'csv'
+require 'pp'
+
+
+require 'shopware/cli/tasks/import/validator'
 
 module Shopware
   module CLI
@@ -22,7 +26,9 @@ module Shopware
                 quantity = data.length
 
                 data.each_with_index do |row, i|
-                  info "Processing #{i + 1} of #{quantity} entries..." if options[:verbose]
+                  index = i + 1
+
+                  info "Processing #{index} of #{quantity} entries..." if options[:verbose]
 
                   dao = OpenStruct.new(
                     category:         row[0],
@@ -47,13 +53,43 @@ module Shopware
                     image_big:        row[19]
                   )
 
-                  category       = find_or_create_category name: dao.category, template: options[:category_template], parent_id: options[:products_category_id]
-                  subcategory    = find_or_create_category name: dao.subcategory, text: dao.subcategory_text, template: options[:category_template], parent_id: category['id']
-                  subsubcategory = find_or_create_category name: dao.subsubcategory, template: options[:category_template], parent_id: subcategory['id']
+                  validator = Validator.new dao
+
+                  if validator.valid?
+                    category = find_or_create_category(
+                      name: dao.category,
+                      template: options[:category_template],
+                      parent_id: options[:products_category_id]
+                    )
+
+                    subcategory = find_or_create_category(
+                      name: dao.subcategory,
+                      text: dao.subcategory_text,
+                      template: options[:category_template],
+                      parent_id: category['id']
+                    ) if dao.subcategory
+
+                    subsubcategory = find_or_create_category(
+                      name: dao.subsubcategory,
+                      template: options[:category_template],
+                      parent_id: subcategory['id']
+                    ) if dao.subsubcategory
+                  else
+                    warning '→ Entry is not valid, skipping...' if options[:verbose]
+
+                    validator.errors.each do |error|
+                      property = error.first
+                      label    = property.to_s.capitalize
+
+                      error "→ #{label} not valid." if options[:verbose]
+                    end
+                  end
                 end
               else
-                error "File: `#{file}` not found."
+                error "File: `#{file}` not found." if options[:verbose]
               end
+
+              ok 'Import finished.' if options[:verbose]
             end
           end
         end
@@ -64,6 +100,8 @@ module Shopware
           transient = @client.find_category_by_name name
 
           if not transient
+            info "→ Category “#{name}” does not exists, creating new one..." if options[:verbose]
+
             properties = {
               name: name,
               cmsHeadline: name,
@@ -77,6 +115,8 @@ module Shopware
 
             client.get_category category['id']
           else
+            info "→ Category “#{name}” already exists." if options[:verbose]
+
             transient
           end
         end
