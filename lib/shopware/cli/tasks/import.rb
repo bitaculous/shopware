@@ -45,7 +45,9 @@ module Shopware
                   image_small      = row[18]
                   image_big        = row[19]
 
-                  category = find_or_create_category category, options[:category_template], options[:products_category_id]
+                  category       = find_or_create_category name: category, template: options[:category_template], parent_id: options[:products_category_id]
+                  subcategory    = find_or_create_category name: subcategory, text: subcategory_text, template: options[:category_template], parent_id: category['id']
+                  subsubcategory = find_or_create_category name: subsubcategory, template: options[:category_template], parent_id: subcategory['id']
                 end
               else
                 error "File: `#{file}` not found."
@@ -56,16 +58,20 @@ module Shopware
 
         private
 
-        def find_or_create_category(name, template, parent_id)
+        def find_or_create_category(name:, text: nil, template:, parent_id:)
           transient = @client.find_category_by_name name
 
           if not transient
-            category = @client.create_category({
+            properties = {
               name: name,
               cmsHeadline: name,
               template: template,
               parentId: parent_id
-            })
+            }
+
+            properties[:cmsText] = text if text
+
+            category = @client.create_category properties
 
             client.get_category category['id']
           else
