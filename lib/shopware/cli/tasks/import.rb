@@ -75,13 +75,13 @@ module Shopware
                       parent_id: subcategory['id']
                     ) if dao.subsubcategory
                   else
-                    warning '→ Entry is not valid, skipping...' if options[:verbose]
+                    warning 'Entry is not valid, skipping...', indent: true if options[:verbose]
 
                     validator.errors.each do |error|
                       property = error.first
                       label    = property.to_s.capitalize
 
-                      error "→ #{label} not valid." if options[:verbose]
+                      error "#{label} not valid.", indent: true if options[:verbose]
                     end
                   end
                 end
@@ -100,7 +100,7 @@ module Shopware
           transient = @client.find_category_by_name name
 
           if not transient
-            info "→ Category “#{name}” does not exists, creating new one..." if options[:verbose]
+            info "Category “#{name}” does not exists, creating new one...", indent: true if options[:verbose]
 
             properties = {
               name: name,
@@ -115,7 +115,7 @@ module Shopware
 
             client.get_category category['id']
           else
-            info "→ Category “#{name}” already exists." if options[:verbose]
+            info "Category “#{name}” already exists.", indent: true if options[:verbose]
 
             transient
           end

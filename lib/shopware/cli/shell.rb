@@ -1,20 +1,28 @@
 module Shopware
   module CLI
     module Shell
-      def info(message)
-        say message, :blue if message
+      def info(message, indent = false)
+        speak message, :blue, indent
       end
 
-      def ok(message)
-        say message, :green if message
+      def ok(message, indent = false)
+        speak message, :green, indent
       end
 
-      def warning(message)
-        say message, :yellow if message
+      def warning(message, indent = false)
+        speak message, :yellow, indent
       end
 
-      def error(message)
-        say message, :red if message
+      def error(message, indent = false)
+        speak message, :red, indent
+      end
+
+      def speak(message, color, indent = false)
+        if indent
+          say "→ #{message}", color
+        else
+          say message, color
+        end
       end
     end
   end
