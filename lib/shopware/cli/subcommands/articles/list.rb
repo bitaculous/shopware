@@ -13,16 +13,16 @@ module Shopware
                 quantity = articles.size
 
                 if quantity > 0
-                  articles.each_with_index do |article, i|
+                  table = Terminal::Table.new headings: ['ID', 'Name']
+
+                  articles.each_with_index do |article|
                     id   = article['id']
                     name = article['name']
 
-                    table = Terminal::Table.new headings: ['ID', 'Name'] do |table|
-                      table << [id, name]
-                    end
-
-                    puts "#{table}\n"
+                    table << [id, name]
                   end
+
+                  puts "#{table}\n"
                 else
                   info 'No articles found.'
                 end
