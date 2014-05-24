@@ -34,6 +34,12 @@ module Shopware
           response['data']
         end
 
+        def update_category(id, properties)
+          response = self.class.put "/categories/#{id}", body: properties
+
+          response['data']
+        end
+
         def delete_category(id)
           self.class.delete "/categories/#{id}"
         end

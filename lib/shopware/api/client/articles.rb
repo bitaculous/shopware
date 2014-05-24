@@ -34,6 +34,12 @@ module Shopware
           response['data']
         end
 
+        def update_article(id, properties)
+          response = self.class.put "/articles/#{id}", body: properties
+
+          response['data']
+        end
+
         def delete_article(id)
           self.class.delete "/articles/#{id}"
         end
