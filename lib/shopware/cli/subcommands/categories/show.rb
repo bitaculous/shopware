@@ -1,4 +1,4 @@
-require 'pp'
+require 'json'
 require 'terminal-table'
 
 module Shopware
@@ -14,9 +14,7 @@ module Shopware
                 category = @client.get_category id
 
                 if category
-                  if options.dump
-                    pp category
-                  else
+                  if not options.dump
                     id             = category['id']
                     name           = category['name']
                     active         = category['active']
@@ -36,6 +34,8 @@ module Shopware
                     end
 
                     puts table
+                  else
+                    puts JSON.pretty_generate category
                   end
                 else
                   info 'Category was not found.'

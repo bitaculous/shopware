@@ -1,4 +1,4 @@
-require 'pp'
+require 'json'
 require 'terminal-table'
 
 module Shopware
@@ -14,9 +14,7 @@ module Shopware
                 article = @client.get_article id
 
                 if article
-                  if options.dump
-                    pp article
-                  else
+                  if not options.dump
                     id   = article['id']
                     name = article['name']
 
@@ -26,6 +24,8 @@ module Shopware
                     end
 
                     puts table
+                  else
+                    puts JSON.pretty_generate article
                   end
                 else
                   info 'Article was not found.'
