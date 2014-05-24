@@ -34,12 +34,44 @@ Usage
 
 2. Run `shopware --help` or `shopware help <command>`
 
+### Articles
+
+#### List articles
+
+```
+$ shopware articles list
+```
+
+#### Show article
+
+```
+$ shopware articles show <ID>
+```
+
+#### Delete article
+
+```
+$ shopware articles delete <ID>
+```
+
 ### Categories
 
 #### List categories
 
 ```
 $ shopware categories list
+```
+
+#### Show category
+
+```
+$ shopware categories show <ID>
+```
+
+#### Delete category
+
+```
+$ shopware categories delete <ID>
 ```
 
 ### Mannol
