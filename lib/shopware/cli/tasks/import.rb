@@ -9,13 +9,13 @@ module Shopware
       module Import
         def self.included(thor)
           thor.class_eval do
-            desc 'import <file>', 'Import products as a CSV file'
+            desc 'import [FILE]', 'Import products as a CSV file'
             option :products_category_id, type: :string, required: true
             option :car_manufacturer_category_id, type: :string, required: true
             option :category_template, type: :string, default: 'Liste'
             def import(file)
               if File.exist? file
-                info "Processing `#{File.basename file}`..." if options[:verbose]
+                info "Processing `#{File.basename file}`..." if options.verbose?
 
                 col_sep    = options.import['column_separator'] || '|'
                 quote_char = options.import['quote_character'] || '"'
@@ -26,7 +26,7 @@ module Shopware
                 data.each_with_index do |row, i|
                   index = i + 1
 
-                  info "Processing #{index} of #{quantity} entries..." if options[:verbose]
+                  info "Processing #{index} of #{quantity} entries..." if options.verbose?
 
                   dao = OpenStruct.new(
                     category:         row[0],
@@ -73,21 +73,21 @@ module Shopware
                       parent_id: subcategory['id']
                     ) if dao.subsubcategory
                   else
-                    warning 'Entry is not valid, skipping...', indent: true if options[:verbose]
+                    warning 'Entry is not valid, skipping...', indent: true if options.verbose?
 
                     validator.errors.each do |error|
                       property = error.first
                       label    = property.to_s.capitalize
 
-                      error "#{label} not valid.", indent: true if options[:verbose]
+                      error "#{label} not valid.", indent: true if options.verbose?
                     end
                   end
                 end
               else
-                error "File: `#{file}` not found." if options[:verbose]
+                error "File: `#{file}` not found." if options.verbose?
               end
 
-              ok 'Import finished.' if options[:verbose]
+              ok 'Import finished.' if options.verbose?
             end
           end
         end
@@ -98,7 +98,7 @@ module Shopware
           transient = @client.find_category_by_name name
 
           if not transient
-            info "Category “#{name}” does not exists, creating new one...", indent: true if options[:verbose]
+            info "Category “#{name}” does not exists, creating new one...", indent: true if options.verbose?
 
             properties = {
               name: name,
@@ -113,7 +113,7 @@ module Shopware
 
             client.get_category category['id']
           else
-            info "Category “#{name}” already exists.", indent: true if options[:verbose]
+            info "Category “#{name}” already exists.", indent: true if options.verbose?
 
             transient
           end
