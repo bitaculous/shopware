@@ -11,7 +11,7 @@ module Shopware
     class Runner < Thor
       attr_reader :client
 
-      class_option :verbose, type: :boolean, default: true
+      class_option :verbose, type: :boolean, default: false
 
       include Thor::Actions
       include Thor::Shell
