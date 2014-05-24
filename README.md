@@ -1,4 +1,4 @@
-[shopware](http://bitaculous.github.io/shopware "shopware")
+[SHOPWARE](http://bitaculous.github.io/shopware "shopware")
 ===========================================================
 
 **A Ruby client for the Shopware API.**
