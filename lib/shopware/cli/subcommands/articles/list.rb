@@ -22,7 +22,7 @@ module Shopware
                     table << [id, name]
                   end
 
-                  puts "#{table}\n"
+                  puts table
                 else
                   info 'No articles found.'
                 end
