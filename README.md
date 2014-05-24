@@ -76,6 +76,12 @@ $ shopware categories delete <ID>
 
 ### Mannol
 
+#### Create base product
+
+```
+$ shopware mannol create_base_product
+```
+
 #### Import products as a CSV file
 
 ```
