@@ -34,16 +34,20 @@ Usage
 
 2. Run `shopware --help` or `shopware help <command>`
 
-### List categories
+### Categories
+
+#### List categories
 
 ```
-$ shopware categories
+$ shopware categories list
 ```
 
-### Import products as a CSV file
+### Mannol
+
+#### Import products as a CSV file
 
 ```
-$ shopware import <file>
+$ shopware mannol import <file>
 ```
 
 License
