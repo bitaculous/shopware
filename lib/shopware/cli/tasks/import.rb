@@ -1,7 +1,6 @@
 require 'csv'
 require 'pp'
 
-
 require 'shopware/cli/tasks/import/validator'
 
 module Shopware
@@ -14,7 +13,6 @@ module Shopware
             option :products_category_id, type: :string, required: true
             option :car_manufacturer_category_id, type: :string, required: true
             option :category_template, type: :string, default: 'Liste'
-            option :verbose, type: :boolean, default: true
             def import(file)
               if File.exist? file
                 info "Processing `#{File.basename file}`..." if options[:verbose]
