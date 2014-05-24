@@ -10,17 +10,21 @@ module Shopware
               desc 'list', 'List articles'
               def list
                 articles = @client.get_articles
+                quantity = articles.size
 
-                articles.each_with_index do |article, i|
-                  id   = article['id']
-                  name = article['name']
+                if quantity > 0
+                  articles.each_with_index do |article, i|
+                    id   = article['id']
+                    name = article['name']
 
-                  table = Terminal::Table.new headings: ['Property', 'Value'] do |table|
-                    table << ['ID', id]     if id
-                    table << ['Name', name] if name
+                    table = Terminal::Table.new headings: ['ID', 'Name'] do |table|
+                      table << [id, name]
+                    end
+
+                    puts "#{table}\n"
                   end
-
-                  puts "#{table}\n"
+                else
+                  info 'No articles found.'
                 end
               end
             end
