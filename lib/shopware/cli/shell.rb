@@ -2,7 +2,7 @@ module Shopware
   module CLI
     module Shell
       def info(message, indent = false)
-        speak message, :blue, indent
+        speak message, :white, indent
       end
 
       def ok(message, indent = false)
