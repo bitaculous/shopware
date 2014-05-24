@@ -1,16 +1,13 @@
 require 'thor'
 
-require 'shopware/api/client'
 require 'shopware/cli/config'
 require 'shopware/cli/shell'
-require 'shopware/cli/tasks/categories'
-require 'shopware/cli/tasks/import'
+require 'shopware/cli/subcommands/categories'
+require 'shopware/cli/subcommands/mannol/subcommand'
 
 module Shopware
   module CLI
     class Runner < Thor
-      attr_reader :client
-
       class_option :verbose, type: :boolean, default: false, aliases: '-v'
 
       include Thor::Actions
@@ -20,15 +17,11 @@ module Shopware
 
       include Shell
 
-      def initialize(*args)
-        super
+      desc 'categories [SUBCOMMAND]', 'Manage categories'
+      subcommand 'categories', Subcommands::Categories
 
-        @client = API::Client.new options.api
-      end
-
-      include Tasks::Import
-
-      include Tasks::Categories
+      desc 'mannol [SUBCOMMAND]', 'Mannol specific commands'
+      subcommand 'mannol', Subcommands::Mannol::Subcommand
     end
   end
 end
