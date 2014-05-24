@@ -10,7 +10,7 @@ module Shopware
           def self.included(thor)
             thor.class_eval do
               desc 'import [FILE]', 'Import products as a CSV file'
-              option :products_category_id, type: :string, required: true
+              option :root_category_id, type: :string, required: true
               option :car_manufacturer_category_id, type: :string, required: true
               option :category_template, type: :string, default: 'article_listing_1col.tpl'
               def import(file)
@@ -59,7 +59,7 @@ module Shopware
                       category = find_or_create_category(
                         name: dao.category,
                         template: options[:category_template],
-                        parent_id: options[:products_category_id]
+                        parent_id: options[:root_category_id]
                       )
 
                       if dao.subcategory
@@ -114,7 +114,7 @@ module Shopware
 
               private
 
-              def find_or_create_category(name:, text: nil, template: 'article_listing_1col.tpl', parent_id:)
+              def find_or_create_category(name:, template:, parent_id:, text: nil)
                 transient = @client.find_category_by_name name
 
                 if not transient
@@ -139,7 +139,7 @@ module Shopware
                 end
               end
 
-              def create_or_update_category(name:, text: nil, template: 'article_listing_1col.tpl', parent_id:)
+              def create_or_update_category(name:, template:, parent_id:, text: nil)
                 transient = @client.find_category_by_name name
 
                 properties = {
