@@ -1,9 +1,7 @@
 require 'thor'
 
-require 'shopware/cli/config'
-require 'shopware/cli/shell'
-require 'shopware/cli/subcommands/categories'
-require 'shopware/cli/subcommands/mannol/subcommand'
+require 'shopware/cli/subcommands/categories_subcommand'
+require 'shopware/cli/subcommands/mannol_subcommand'
 
 module Shopware
   module CLI
@@ -13,15 +11,11 @@ module Shopware
       include Thor::Actions
       include Thor::Shell
 
-      include Config
-
-      include Shell
-
       desc 'categories [SUBCOMMAND]', 'Manage categories'
-      subcommand 'categories', Subcommands::Categories
+      subcommand 'categories', Subcommands::CategoriesSubcommand
 
       desc 'mannol [SUBCOMMAND]', 'Mannol specific commands'
-      subcommand 'mannol', Subcommands::Mannol::Subcommand
+      subcommand 'mannol', Subcommands::MannolSubcommand
     end
   end
 end
