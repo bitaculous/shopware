@@ -58,22 +58,22 @@ module Shopware
 
                       category = find_or_create_category(
                         name: dao.category,
-                        template: options[:category_template],
-                        parent_id: options[:root_category_id]
+                        template: options.category_template,
+                        parent_id: options.root_category_id
                       )
 
                       if dao.subcategory
                         subcategory = find_or_create_category(
                           name: dao.subcategory,
                           text: dao.subcategory_text,
-                          template: options[:category_template],
+                          template: options.category_template,
                           parent_id: category['id']
                         )
 
                         if dao.subsubcategory
                           subsubcategory = find_or_create_category(
                             name: dao.subsubcategory,
-                            template: options[:category_template],
+                            template: options.category_template,
                             parent_id: subcategory['id']
                           )
                         end
@@ -82,14 +82,14 @@ module Shopware
                       if dao.car_manufacturer_category
                         car_manufacturer_category = find_or_create_category(
                           name: dao.car_manufacturer_category,
-                          template: options[:category_template],
-                          parent_id: options[:car_manufacturer_category_id]
+                          template: options.category_template,
+                          parent_id: options.car_manufacturer_category_id
                         )
 
                         if dao.car_category
                           car_category = find_or_create_category(
                             name: dao.car_category,
-                            template: options[:category_template],
+                            template: options.category_template,
                             parent_id: car_manufacturer_category['id']
                           )
                         end
