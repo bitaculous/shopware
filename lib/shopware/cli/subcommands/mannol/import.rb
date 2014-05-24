@@ -27,49 +27,71 @@ module Shopware
                     info "Processing #{index} of #{quantity} entries..." if options.verbose?
 
                     dao = OpenStruct.new(
-                      category:         row[0],
-                      subcategory:      row[1],
-                      subcategory_text: row[2],
-                      subsubcategory:   row[3],
-                      brand:            row[4],
-                      number:           row[5],
-                      name:             row[6],
-                      content:          row[7],
-                      content_unit:     row[8],
-                      order_number:     row[9],
-                      description:      row[10],
-                      code:             row[11],
-                      car_manufacturer: row[12],
-                      car_id:           row[13],
-                      property:         row[14],
-                      test_method:      row[15],
-                      property_value:   row[16],
-                      property_unit:    row[17],
-                      image_small:      row[18],
-                      image_big:        row[19]
+                      category:                  row[0],
+                      subcategory:               row[1],
+                      subcategory_text:          row[2],
+                      subsubcategory:            row[3],
+                      brand:                     row[4],
+                      number:                    row[5],
+                      name:                      row[6],
+                      content:                   row[7],
+                      content_unit:              row[8],
+                      order_number:              row[9],
+                      description:               row[10],
+                      code:                      row[11],
+                      car_manufacturer_category: row[12],
+                      car_category:              row[13],
+                      property:                  row[14],
+                      test_method:               row[15],
+                      property_value:            row[16],
+                      property_unit:             row[17],
+                      image_small:               row[18],
+                      image_big:                 row[19]
                     )
 
                     validator = Validator.new dao
 
                     if validator.valid?
+                      # === Categories ===
+
                       category = find_or_create_category(
                         name: dao.category,
                         template: options[:category_template],
                         parent_id: options[:products_category_id]
                       )
 
-                      subcategory = find_or_create_category(
-                        name: dao.subcategory,
-                        text: dao.subcategory_text,
-                        template: options[:category_template],
-                        parent_id: category['id']
-                      ) if dao.subcategory
+                      if dao.subcategory
+                        subcategory = find_or_create_category(
+                          name: dao.subcategory,
+                          text: dao.subcategory_text,
+                          template: options[:category_template],
+                          parent_id: category['id']
+                        )
 
-                      subsubcategory = find_or_create_category(
-                        name: dao.subsubcategory,
-                        template: options[:category_template],
-                        parent_id: subcategory['id']
-                      ) if dao.subsubcategory
+                        if dao.subsubcategory
+                          subsubcategory = find_or_create_category(
+                            name: dao.subsubcategory,
+                            template: options[:category_template],
+                            parent_id: subcategory['id']
+                          )
+                        end
+                      end
+
+                      if dao.car_manufacturer_category
+                        car_manufacturer_category = find_or_create_category(
+                          name: dao.car_manufacturer_category,
+                          template: options[:category_template],
+                          parent_id: options[:car_manufacturer_category_id]
+                        )
+
+                        if dao.car_category
+                          car_category = find_or_create_category(
+                            name: dao.car_category,
+                            template: options[:category_template],
+                            parent_id: car_manufacturer_category['id']
+                          )
+                        end
+                      end
                     else
                       warning 'Entry is not valid, skipping...', indent: true if options.verbose?
 
