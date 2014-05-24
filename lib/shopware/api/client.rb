@@ -1,5 +1,6 @@
 require 'httparty'
 
+require 'shopware/api/client/articles'
 require 'shopware/api/client/categories'
 
 module Shopware
@@ -17,6 +18,8 @@ module Shopware
         self.class.base_uri options['base_uri']
         self.class.digest_auth options['username'], options['key']
       end
+
+      include Articles
 
       include Categories
     end
