@@ -29,26 +29,26 @@ module Shopware
                     info "Processing #{index} of #{quantity} entries..." if options.verbose?
 
                     dao = OpenStruct.new(
-                      category:                  row[0],
-                      subcategory:               row[1],
-                      subcategory_text:          row[2],
-                      subsubcategory:            row[3],
-                      brand:                     row[4],
-                      number:                    row[5],
-                      name:                      row[6],
-                      content:                   row[7],
-                      content_unit:              row[8],
-                      order_number:              row[9],
-                      description:               row[10],
-                      code:                      row[11],
-                      car_manufacturer_category: row[12],
-                      car_category:              row[13],
-                      property:                  row[14],
-                      test_method:               row[15],
-                      property_value:            row[16],
-                      property_unit:             row[17],
-                      image_small:               row[18],
-                      image_big:                 row[19]
+                      number:                    row[0],
+                      order_number:              row[1],
+                      code:                      row[2],
+                      name:                      row[3],
+                      description:               row[4],
+                      brand:                     row[5],
+                      capacity:                  row[6],
+                      capacity_unit:             row[7],
+                      property:                  row[8],
+                      test_method:               row[9],
+                      property_value:            row[10],
+                      property_unit:             row[11],
+                      image_small:               row[12],
+                      image_big:                 row[13],
+                      category:                  row[14],
+                      subcategory:               row[15],
+                      subcategory_text:          row[16],
+                      subsubcategory:            row[17],
+                      car_manufacturer_category: row[18],
+                      car_category:              row[19]
                     )
 
                     validator = Validator.new dao
