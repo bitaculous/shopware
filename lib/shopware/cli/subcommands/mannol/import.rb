@@ -20,6 +20,15 @@ module Shopware
 
                   reader = Reader.new file, options.import['column_separator'], options.import['quote_character']
 
+                  pp reader.headers
+
+                  search = reader.search({
+                    'name' => 'ATF AG52 Automatic Special',
+                    'content' => 4
+                  })
+
+                  pp search.length
+
                   pp reader.quantity
                 else
                   error "File: `#{file}` not found." if options.verbose?
