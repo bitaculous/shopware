@@ -9,6 +9,7 @@ module Shopware
 
               def initialize
                 @properties = []
+
                 @car_categories = []
               end
             end

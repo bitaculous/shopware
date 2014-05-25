@@ -12,6 +12,7 @@ module Shopware
 
               rule :name,         :not_empty
               rule :code,         :not_empty
+              rule :order_number, :not_empty
               rule :description,  :not_empty
               rule :supplier,     :not_empty
             end
