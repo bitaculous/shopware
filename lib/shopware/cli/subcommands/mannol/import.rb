@@ -3,7 +3,7 @@ require 'pp'
 require 'shopware/cli/subcommands/mannol/import/models/product'
 require 'shopware/cli/subcommands/mannol/import/models/variant'
 require 'shopware/cli/subcommands/mannol/import/reader'
-require 'shopware/cli/subcommands/mannol/import/validator'
+require 'shopware/cli/subcommands/mannol/import/validators/product'
 
 module Shopware
   module CLI
@@ -34,6 +34,21 @@ module Shopware
                     index = i + 1
 
                     info "Processing #{index}. product “#{product.name}” of #{quantity}..." if options.verbose?
+
+                    validator = Validators::Product.new product
+
+                    if validator.valid?
+                      pp 'Foo'
+                    else
+                      warning 'Entry is not valid, skipping...', indent: true if options.verbose?
+
+                      validator.errors.each do |error|
+                        property = error.first
+                        label    = property.to_s.capitalize
+
+                        error "#{label} not valid.", indent: true if options.verbose?
+                      end
+                    end
                   end
                 else
                   error "File: `#{file}` not found." if options.verbose?
