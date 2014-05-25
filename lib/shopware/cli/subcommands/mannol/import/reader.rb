@@ -11,6 +11,7 @@ module Shopware
             def initialize(file, col_sep = '|', quote_char = '"')
               options = {
                 headers: :first_row,
+                header_converters: :symbol,
                 converters: [:numeric],
                 col_sep: col_sep,
                 quote_char: quote_char
@@ -31,6 +32,10 @@ module Shopware
 
                 match
               end
+            end
+
+            def products
+
             end
           end
         end

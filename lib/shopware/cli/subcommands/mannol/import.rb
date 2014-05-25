@@ -23,8 +23,8 @@ module Shopware
                   pp reader.headers
 
                   search = reader.search({
-                    'name' => 'ATF AG52 Automatic Special',
-                    'content' => 4
+                    name: 'ATF AG52 Automatic Special',
+                    content: 4
                   })
 
                   pp search.length
