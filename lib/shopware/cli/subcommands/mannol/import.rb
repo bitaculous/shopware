@@ -1,5 +1,7 @@
 require 'pp'
 
+require 'shopware/cli/subcommands/mannol/import/models/product'
+require 'shopware/cli/subcommands/mannol/import/models/variant'
 require 'shopware/cli/subcommands/mannol/import/reader'
 require 'shopware/cli/subcommands/mannol/import/validator'
 
@@ -20,16 +22,19 @@ module Shopware
 
                   reader = Reader.new file, options.import['column_separator'], options.import['quote_character']
 
-                  pp reader.headers
+                  products = reader.products
+                  quantity = products.length
 
-                  search = reader.search({
-                    name: 'ATF AG52 Automatic Special',
-                    content: 4
-                  })
+                  info "Found #{quantity} product(s)." if options.verbose?
 
-                  pp search.length
+                  products = reader.products
+                  quantity = products.length
 
-                  pp reader.quantity
+                  products.each_with_index do |product, i|
+                    index = i + 1
+
+                    info "Processing #{index}. product “#{product.name}” of #{quantity}..." if options.verbose?
+                  end
                 else
                   error "File: `#{file}` not found." if options.verbose?
                 end
