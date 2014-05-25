@@ -6,7 +6,7 @@ module Shopware
       module Mannol
         module Import
           class Reader
-            attr_reader :csv, :headers
+            attr_reader :csv, :headers, :quantity
 
             def initialize(file, col_sep = '|', quote_char = '"')
               options = {
@@ -16,8 +16,9 @@ module Shopware
                 quote_char: quote_char
               }
 
-              @csv     = CSV.read file, options
-              @headers = @csv.headers
+              @csv      = CSV.read file, options
+              @headers  = @csv.headers
+              @quantity = @csv.length
             end
 
             def search(criterions)
@@ -30,10 +31,6 @@ module Shopware
 
                 match
               end
-            end
-
-            def quantity
-              @csv.length
             end
           end
         end
