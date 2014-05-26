@@ -10,9 +10,9 @@ module Shopware
             class Product < Validation::Validator
               include Validation
 
-              rule :name,         :not_empty
-              rule :code,         :not_empty
+              rule :number,       :not_empty
               rule :order_number, :not_empty
+              rule :name,         :not_empty
               rule :description,  :not_empty
               rule :supplier,     :not_empty
             end

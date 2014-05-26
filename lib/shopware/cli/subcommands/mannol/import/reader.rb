@@ -1,5 +1,5 @@
 require 'csv'
-require 'pp'
+require 'securerandom'
 
 require 'shopware/cli/subcommands/mannol/import/models/product'
 require 'shopware/cli/subcommands/mannol/import/models/variant'
@@ -16,7 +16,7 @@ module Shopware
               options = {
                 headers: :first_row,
                 header_converters: :symbol,
-                converters: [:numeric],
+                converters: [:numeric, :float],
                 col_sep: col_sep,
                 quote_char: quote_char
               }
@@ -45,6 +45,7 @@ module Shopware
                 name: name
               }, completely)
 
+              product.number       = generate_number
               product.name         = name
               product.code         = entity[:code]
               product.order_number = entity[:order_number]
@@ -64,7 +65,8 @@ module Shopware
                   number: number
                 }, material)
 
-                variant.number = number
+                variant.number          = generate_number
+                variant.supplier_number = number
 
                 properties = column(:property, material).uniq
 
@@ -110,6 +112,10 @@ module Shopware
             end
 
             private
+
+            def generate_number
+              SecureRandom.uuid
+            end
 
             def search(criterions)
               matches = @csv.find_all do |row|
