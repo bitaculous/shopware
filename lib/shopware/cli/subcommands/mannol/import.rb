@@ -212,6 +212,7 @@ module Shopware
                   tax: 19,
                   mainDetail: {
                     number: product.number,
+                    propertyGroup: '2',
                     prices: [
                       {
                         customerGroupKey: 'EK',
@@ -222,13 +223,20 @@ module Shopware
                   configuratorSet: {
                     groups: []
                   },
-                  propertyGroupId: options.property_group_id,
+                  filterGroupId: options.filter_group_id,
                   propertyValues: [
                     {
                       option: {
-                        name: 'Farbe'
+                        name: 'Farbe2'
                       },
                       value: 'Gelb'
+                    },
+
+                    {
+                      option: {
+                        name: 'Farbe2'
+                      },
+                      value: 'Grün'
                     },
 
                     {

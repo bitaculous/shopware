@@ -45,7 +45,7 @@ module Shopware
               option :name, type: :string, default: 'Öl'
               option :position, type: :numeric, default: 0
               option :comparable, type: :boolean, default: true
-              option :sort_mode, type: :numeric, default: 1
+              option :sort_mode, type: :numeric, default: 2
 
               def create_oil_property_group
                 properties = {
