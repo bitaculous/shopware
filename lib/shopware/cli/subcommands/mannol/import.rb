@@ -15,11 +15,13 @@ module Shopware
               desc 'import [FILE]', 'Import products as a CSV file'
               option :root_category_id, type: :string, required: true
               option :car_manufacturer_category_id, type: :string, required: true
-              option :category_template, type: :string, default: 'article_listing_1col.tpl'
-              option :price, type: :numeric, default: 999
-              option :in_stock, type: :numeric, default: 15
-              option :stockmin, type: :numeric, default: 1
-              option :content_configurator_set_name, type: :string, default: 'Inhalt'
+              option :defaults, type: :hash, default: {
+                'price'                         => 999,
+                'in_stock'                      => 15,
+                'stockmin'                      => 1,
+                'content_configurator_set_name' => 'Inhalt',
+                'category_template'             => 'article_listing_1col.tpl'
+              }
               def import(file)
                 if File.exist? file
                   info "Processing `#{File.basename file}`..." if options.verbose?
@@ -98,7 +100,7 @@ module Shopware
                     prices: [
                       {
                         customerGroupKey: 'EK',
-                        price: options.price
+                        price: options.defaults['price']
                       }
                     ]
                   },
@@ -109,7 +111,7 @@ module Shopware
                 }
 
                 content_configurator_set = {
-                  name: options.content_configurator_set_name,
+                  name: options.defaults['content_configurator_set_name'],
                   options: []
                 }
 
@@ -131,12 +133,12 @@ module Shopware
                   purchaseUnit: variant.purchase_unit,
                   referenceUnit: variant.reference_unit,
                   unitId: variant.unit_id,
-                  inStock: options.in_stock,
-                  stockmin: options.stockmin,
+                  inStock: options.defaults['in_stock'],
+                  stockmin: options.defaults['stockmin'],
                   prices: [
                     {
                       customerGroupKey: 'EK',
-                      price: options.price
+                      price: options.defaults['price']
                     }
                   ],
                   configuratorOptions: [],
@@ -144,7 +146,7 @@ module Shopware
                 }
 
                 data[:configuratorOptions] << {
-                  group: options.content_configurator_set_name,
+                  group: options.defaults['content_configurator_set_name'],
                   option: variant.content
                 }
 
