@@ -127,6 +127,11 @@ $ shopware mannol create_base_article
 $ shopware mannol import <file>
 ```
 
+Client
+------
+
+See [client.rb](https://github.com/bitaculous/shopware/blob/lib/shopware/api/client.rb "client.rub").
+
 License
 -------
 
