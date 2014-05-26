@@ -2,6 +2,7 @@ require 'httparty'
 
 require 'shopware/api/client/articles'
 require 'shopware/api/client/categories'
+require 'shopware/api/client/property_groups'
 require 'shopware/api/client/variants'
 
 module Shopware
@@ -23,6 +24,8 @@ module Shopware
       include Articles
 
       include Categories
+
+      include PropertyGroups
 
       include Variants
     end

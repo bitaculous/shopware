@@ -79,6 +79,26 @@ $ shopware categories show <ID>
 $ shopware categories delete <ID>
 ```
 
+### Property groups
+
+#### List property groups
+
+```
+$ shopware property_groups list
+```
+
+#### Show property group
+
+```
+$ shopware property_groups show <ID>
+```
+
+#### Delete property group
+
+```
+$ shopware property_groups delete <ID>
+```
+
 ### Variants
 
 #### Show variant
