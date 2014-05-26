@@ -23,6 +23,8 @@ module Shopware
                 'category_template'             => 'article_listing_1col.tpl'
               }
               def import(file)
+                defaults = options.defaults
+
                 if File.exist? file
                   info "Processing `#{File.basename file}`..." if options.verbose?
 
@@ -100,7 +102,7 @@ module Shopware
                     prices: [
                       {
                         customerGroupKey: 'EK',
-                        price: options.defaults['price']
+                        price: defaults['price']
                       }
                     ]
                   },
@@ -111,7 +113,7 @@ module Shopware
                 }
 
                 content_configurator_set = {
-                  name: options.defaults['content_configurator_set_name'],
+                  name: defaults['content_configurator_set_name'],
                   options: []
                 }
 
@@ -133,12 +135,12 @@ module Shopware
                   purchaseUnit: variant.purchase_unit,
                   referenceUnit: variant.reference_unit,
                   unitId: variant.unit_id,
-                  inStock: options.defaults['in_stock'],
-                  stockmin: options.defaults['stockmin'],
+                  inStock: defaults['in_stock'],
+                  stockmin: defaults['stockmin'],
                   prices: [
                     {
                       customerGroupKey: 'EK',
-                      price: options.defaults['price']
+                      price: defaults['price']
                     }
                   ],
                   configuratorOptions: [],
@@ -146,7 +148,7 @@ module Shopware
                 }
 
                 data[:configuratorOptions] << {
-                  group: options.defaults['content_configurator_set_name'],
+                  group: defaults['content_configurator_set_name'],
                   option: variant.content
                 }
 
