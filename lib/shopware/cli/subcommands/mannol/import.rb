@@ -224,35 +224,7 @@ module Shopware
                     groups: []
                   },
                   filterGroupId: options.filter_group_id,
-                  propertyValues: [
-                    {
-                      option: {
-                        name: 'Farbe2'
-                      },
-                      value: 'Gelb'
-                    },
-
-                    {
-                      option: {
-                        name: 'Farbe2'
-                      },
-                      value: 'Grün'
-                    },
-
-                    {
-                      option: {
-                        name: 'Farbe'
-                      },
-                      value: 'Grün'
-                    },
-
-                    {
-                      option: {
-                        name: 'Farbe'
-                      },
-                      value: 'Rot'
-                    }
-                  ],
+                  propertyValues: [],
                   categories: [],
                   active: true
                 }
@@ -270,6 +242,23 @@ module Shopware
                   end
 
                   data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
+                end
+
+                properties = product.properties
+
+                if not properties.empty?
+                  properties.each do |property|
+                    name  = property[:name]
+                    value = property[:value]
+
+                    data[:propertyValues] << {
+                      option: {
+                        name: name
+                      },
+
+                      value: value
+                    }
+                  end
                 end
 
                 if not categories.empty?

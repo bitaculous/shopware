@@ -37,39 +37,56 @@ module Shopware
             def product(name)
               product = Models::Product.new
 
-              completely = search({
+              full = search({
                 name: name
               })
 
               entity = find({
                 name: name
-              }, completely)
+              }, full)
 
-              product.number                  = generate_number
-              product.name                    = name
-              product.code                    = entity[:code]
-              product.order_number            = entity[:order_number]
-              product.description             = entity[:description]
-              product.supplier                = entity[:supplier]
+              product.number       = generate_number
+              product.name         = name
+              product.code         = entity[:code]
+              product.order_number = entity[:order_number]
+              product.description  = entity[:description]
+              product.supplier     = entity[:supplier]
+
+              properties = column(:property, full).compact.uniq
+
+              properties.each do |property|
+                data = find({
+                  property: property
+                }, full)
+
+                name        = property
+                test_method = data[:property_test_method]
+                value       = data[:property_value]
+
+                name = "#{property} (#{test_method})" if test_method
+
+                product.properties << { name: name, value: value }
+              end
+
               product.category                = entity[:category]
               product.subcategory             = entity[:subcategory]
               product.subcategory_description = entity[:subcategory_description]
               product.subsubcategory          = entity[:subsubcategory]
 
-              car_manufacturer_categories = column(:car_manufacturer_category, completely).compact.uniq
+              car_manufacturer_categories = column(:car_manufacturer_category, full).compact.uniq
 
               if not car_manufacturer_categories.empty?
                 car_manufacturer_categories.each do |car_manufacturer_category|
                   product.car_manufacturer_categories << { name: car_manufacturer_category }
                 end
 
-                car_categories = column(:car_category, completely).compact.uniq
+                car_categories = column(:car_category, full).compact.uniq
 
                 if not car_categories.empty?
                   car_categories.each do |car_category|
                     data = find({
                       car_category: car_category
-                    }, completely)
+                    }, full)
 
                     car_manufacturer = data[:car_manufacturer_category]
 
@@ -80,14 +97,14 @@ module Shopware
                 end
               end
 
-              numbers = column(:number, completely).uniq
+              numbers = column(:number, full).uniq
 
               numbers.each do |number|
                 variant = Models::Variant.new
 
                 material = find_all({
                   number: number
-                }, completely)
+                }, full)
 
                 one = find({
                   number: number
@@ -97,25 +114,8 @@ module Shopware
                 variant.supplier_number = number
                 variant.content_value   = one[:content_value]
                 variant.content_unit    = one[:content_unit]
-
-                properties = column(:property, material).uniq
-
-                properties.each do |property|
-                  data = find({
-                    property: property
-                  }, material)
-
-                  label       = property
-                  test_method = data[:property_test_method]
-                  value       = data[:property_value]
-
-                  label = "#{property} (#{test_method})" if test_method
-
-                  variant.properties << { label: label, value: value }
-                end
-
-                variant.image_small = one[:image_small]
-                variant.image_big   = one[:image_big]
+                variant.image_small     = one[:image_small]
+                variant.image_big       = one[:image_big]
 
                 product.variants.push variant
               end
