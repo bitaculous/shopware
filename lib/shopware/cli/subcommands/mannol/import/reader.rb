@@ -45,12 +45,40 @@ module Shopware
                 name: name
               }, completely)
 
-              product.number       = generate_number
-              product.name         = name
-              product.code         = entity[:code]
-              product.order_number = entity[:order_number]
-              product.description  = entity[:description]
-              product.supplier     = entity[:supplier]
+              product.number                  = generate_number
+              product.name                    = name
+              product.code                    = entity[:code]
+              product.order_number            = entity[:order_number]
+              product.description             = entity[:description]
+              product.supplier                = entity[:supplier]
+              product.category                = entity[:category]
+              product.subcategory             = entity[:subcategory]
+              product.subcategory_description = entity[:subcategory_description]
+              product.subsubcategory          = entity[:subsubcategory]
+
+              car_manufacturer_categories = column(:car_manufacturer_category, completely).compact.uniq
+
+              if not car_manufacturer_categories.empty?
+                car_manufacturer_categories.each do |car_manufacturer_category|
+                  product.car_manufacturer_categories << { name: car_manufacturer_category }
+                end
+
+                car_categories = column(:car_category, completely).compact.uniq
+
+                if not car_categories.empty?
+                  car_categories.each do |car_category|
+                    data = find({
+                      car_category: car_category
+                    }, completely)
+
+                    car_manufacturer = data[:car_manufacturer_category]
+
+                    if car_manufacturer
+                      product.car_categories << { name: car_category, car_manufacturer: car_manufacturer }
+                    end
+                  end
+                end
+              end
 
               numbers = column(:number, completely).uniq
 
@@ -86,26 +114,8 @@ module Shopware
                   variant.properties << { label: label, value: value }
                 end
 
-                variant.image_small             = one[:image_small]
-                variant.image_big               = one[:image_big]
-                variant.category                = one[:category]
-                variant.subcategory             = one[:subcategory]
-                variant.subcategory_description = one[:subcategory_description]
-                variant.subsubcategory          = one[:subsubcategory]
-
-                car_categories = column(:car_category, material).uniq
-
-                car_categories.each do |car_category|
-                  data = find({
-                    car_category: car_category
-                  }, material)
-
-                  label = car_category
-
-                  car_manufacturer = data[:car_manufacturer_category]
-
-                  variant.car_categories << { label: label, car_manufacturer: car_manufacturer }
-                end
+                variant.image_small = one[:image_small]
+                variant.image_big   = one[:image_big]
 
                 product.variants.push variant
               end

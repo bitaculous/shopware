@@ -5,15 +5,20 @@ module Shopware
         module Import
           module Models
             class Product
-              attr_accessor :number, :code, :order_number, :name, :description,
-                            :supplier, :variants
+              attr_accessor :number, :code, :order_number, :name, :description, :supplier, :category, :subcategory,
+                            :subcategory_description, :subsubcategory, :car_manufacturer_categories, :car_categories,
+                            :variants
 
               def initialize
+                @car_manufacturer_categories = []
+
+                @car_categories = []
+
                 @variants = []
               end
 
               def content_options
-                @variants.map { |variant| variant.content }
+                @variants.map { |variant| variant.content }.compact
               end
             end
           end

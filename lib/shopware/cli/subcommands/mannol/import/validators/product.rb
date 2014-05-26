@@ -15,6 +15,9 @@ module Shopware
               rule :name,         :not_empty
               rule :description,  :not_empty
               rule :supplier,     :not_empty
+              rule :category,     :not_empty
+              rule :subcategory,  :not_empty
+              rule :variants,     :not_empty
             end
           end
         end

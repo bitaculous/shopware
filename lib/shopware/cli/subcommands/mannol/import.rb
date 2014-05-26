@@ -49,7 +49,9 @@ module Shopware
                       article = @client.find_article_by_name product.name
 
                       if not article
-                        data = get_article_data product, options
+                        categories = categories(product: product, options: options, defaults: defaults)
+
+                        data = get_article_data(product: product, categories: categories, options: options, defaults: defaults)
 
                         article = @client.create_article data
 
@@ -59,7 +61,7 @@ module Shopware
                           variants.sort! { |x, y| x.purchase_unit <=> y.purchase_unit }
 
                           variants.each do |variant|
-                            data = get_variant_data(article, variant, options)
+                            data = get_variant_data(article: article, variant: variant, options: options, defaults: defaults)
 
                             variant = @client.create_variant data
 
@@ -74,7 +76,7 @@ module Shopware
                         warning 'Product already exists, skipping...', indent: true if options.verbose?
                       end
                     else
-                      warning 'Product is not valid, skipping...', indent: true if options.verbose?
+                      error 'Product is not valid, skipping...', indent: true if options.verbose?
 
                       validator.errors.each do |error|
                         property = error.first
@@ -91,7 +93,115 @@ module Shopware
 
               private
 
-              def get_article_data(product, options)
+              def categories(product:, options:, defaults:)
+                categories = []
+
+                category = product.category
+
+                if category
+                  category = find_or_create_category(
+                    name: category,
+                    template: defaults['category_template'],
+                    parent_id: options.root_category_id
+                  )
+
+                  if category
+                    categories << category['id']
+
+                    subcategory = product.subcategory
+
+                    if subcategory
+                      description = product.subcategory_description
+
+                      subcategory = find_or_create_category(
+                        name: subcategory,
+                        text: description,
+                        template: defaults['category_template'],
+                        parent_id: category['id']
+                      )
+
+                      if subcategory
+                        categories << subcategory['id']
+
+                        subsubcategory = product.subsubcategory
+
+                        if subsubcategory
+                          subsubcategory = find_or_create_category(
+                            name: subsubcategory,
+                            template: defaults['category_template'],
+                            parent_id: subcategory['id']
+                          )
+
+                          if subsubcategory
+                            categories << subsubcategory['id']
+                          else
+                            error 'Uuuuuppppss, something went wrong while creating subsubcategory.', indent: true if options.verbose?
+                          end
+                        end
+                      else
+                        error 'Uuuuuppppss, something went wrong while creating subcategory.', indent: true if options.verbose?
+                      end
+                    end
+                  else
+                    error 'Uuuuuppppss, something went wrong while creating category.', indent: true if options.verbose?
+                  end
+                end
+
+                car_manufacturer_categories = product.car_manufacturer_categories
+
+                if not car_manufacturer_categories.empty?
+                  car_manufacturer_categories.each do |car_manufacturer_category|
+                    name = car_manufacturer_category[:name]
+
+                    car_manufacturer_category = find_or_create_category(
+                      name: name,
+                      template: options.category_template,
+                      parent_id: options.car_manufacturer_category_id
+                    )
+
+                    if car_manufacturer_category
+                      categories << car_manufacturer_category['id']
+                    else
+                      error 'Uuuuuppppss, something went wrong while creating car manufacturer category.', indent: true if options.verbose?
+                    end
+                  end
+                end
+
+                car_categories = product.car_categories
+
+                if not car_categories.empty?
+                  car_categories.each do |car_category|
+                    name             = car_category[:name]
+                    car_manufacturer = car_category[:car_manufacturer]
+
+                    car_manufacturer_category = find_or_create_category(
+                      name: car_manufacturer,
+                      template: options.category_template,
+                      parent_id: options.car_manufacturer_category_id
+                    )
+
+                    if car_manufacturer_category
+                      car_category = find_or_create_category(
+                        name: name,
+                        template: options.category_template,
+                        parent_id: car_manufacturer_category['id']
+                      )
+
+                      if car_category
+                        categories << car_category['id']
+                      else
+                        error 'Uuuuuppppss, something went wrong while creating car category.', indent: true if options.verbose?
+                      end
+                    else
+                      error 'Uuuuuppppss, something went wrong while creating car manufacturer category for car category.', indent: true if options.verbose?
+                    end
+                  end
+                end
+
+                categories
+              end
+
+              def get_article_data(product:, categories:, options:, defaults:)
                 data = {
                   name: product.name,
                   descriptionLong: product.description,
@@ -109,24 +219,35 @@ module Shopware
                   configuratorSet: {
                     groups: []
                   },
+                  categories: [],
                   active: true
                 }
 
-                content_configurator_set = {
-                  name: defaults['content_configurator_set_name'],
-                  options: []
-                }
+                content_options = product.content_options
 
-                product.content_options.each do |option|
-                  content_configurator_set[:options] << { name: option }
+                if not content_options.empty?
+                  content_configurator_set = {
+                    name: defaults['content_configurator_set_name'],
+                    options: []
+                  }
+
+                  content_options.each do |option|
+                    content_configurator_set[:options] << { name: option } if option
+                  end
+
+                  data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
                 end
 
-                data[:configuratorSet][:groups] << content_configurator_set
+                if not categories.empty?
+                  categories.each do |category|
+                    data[:categories] << { id: category }
+                  end
+                end
 
                 data
               end
 
-              def get_variant_data(article, variant, options)
+              def get_variant_data(article:, variant:, options:, defaults:)
                 data = {
                   articleId: article['id'],
                   number: variant.number,
@@ -147,10 +268,14 @@ module Shopware
                   active: true
                 }
 
-                data[:configuratorOptions] << {
-                  group: defaults['content_configurator_set_name'],
-                  option: variant.content
-                }
+                content = variant.content
+
+                if content
+                  data[:configuratorOptions] << {
+                    group: defaults['content_configurator_set_name'],
+                    option: variant.content
+                  }
+                end
 
                 data
               end
