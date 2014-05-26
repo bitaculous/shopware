@@ -4,19 +4,19 @@ require 'terminal-table'
 module Shopware
   module CLI
     module Subcommands
-      module Articles
+      module Variants
         module Show
           def self.included(thor)
             thor.class_eval do
-              desc 'show ID', 'Show article with ID'
+              desc 'show ID', 'Show variant with ID'
               option :dump, type: :boolean, default: false, aliases: '-d'
               def show(id)
-                article = @client.get_article id
+                variant = @client.get_variant id
 
-                if article
+                if variant
                   if not options.dump
-                    id   = article['id']
-                    name = article['name']
+                    id   = variant['id']
+                    name = variant['name']
 
                     table = Terminal::Table.new headings: ['Property', 'Value'] do |table|
                       table << ['ID', id]     if id
@@ -25,10 +25,10 @@ module Shopware
 
                     puts table
                   else
-                    puts JSON.pretty_generate article
+                    puts JSON.pretty_generate variant
                   end
                 else
-                  info 'Article was not found.'
+                  info 'Variant was not found.'
                 end
               end
             end

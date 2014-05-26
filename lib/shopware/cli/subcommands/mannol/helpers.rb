@@ -1,5 +1,3 @@
-require 'pp'
-
 module Shopware
   module CLI
     module Subcommands
@@ -38,9 +36,9 @@ module Shopware
                 article = @client.create_article properties
 
                 if article
-                  ok "Article created."
+                  ok 'Article created.'
                 else
-                  error "Uppppps, something went wrong."
+                  error 'Uuuuuppppss, something went wrong.'
                 end
               end
             end

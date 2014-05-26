@@ -16,8 +16,9 @@ module Shopware
               option :root_category_id, type: :string, required: true
               option :car_manufacturer_category_id, type: :string, required: true
               option :category_template, type: :string, default: 'article_listing_1col.tpl'
-              option :default_price, type: :numeric, default: 999
-              option :default_in_stock, type: :numeric, default: 15
+              option :price, type: :numeric, default: 999
+              option :in_stock, type: :numeric, default: 15
+              option :content_configurator_set_name, type: :string, default: 'Inhalt'
               def import(file)
                 if File.exist? file
                   info "Processing `#{File.basename file}`..." if options.verbose?
@@ -43,83 +44,22 @@ module Shopware
                       article = @client.find_article_by_name product.name
 
                       if not article
-                        properties = {
-                          active: true,
-                          name: product.name,
-                          supplier: product.supplier,
-                          tax: 19,
-                          mainDetail: {
-                            number: product.number,
-                            prices: [
-                              {
-                                customerGroupKey: 'EK',
-                                price: options.default_price
-                              }
-                            ]
-                          }
-                        }
+                        data = get_article_data product, options
 
-                        article = @client.create_article properties
+                        article = @client.create_article data
 
                         if article
-                          id = article['id']
-
-                          properties = {
-                            configuratorSet: {
-                              groups: []
-                            },
-                            variants: []
-                          }
-
-                          product.all_properties.each do |property|
-                            data = {
-                              name: property[:label],
-                              options: []
-                            }
-
-                            property[:values].each do |value|
-                              data[:options] << { name: value }
-                            end
-
-                            properties[:configuratorSet][:groups] << data
-                          end
-
                           product.variants.each do |variant|
-                            data = {
-                              isMain: true,
-                              number: variant.number,
-                              supplierNumber: variant.supplier_number,
-                              inStock: options.default_in_stock,
-                              configuratorOptions: [],
-                              prices: [
-                                {
-                                  customerGroupKey: 'EK',
-                                  price: options.default_price
-                                }
-                              ]
-                            }
+                            data = get_variant_data(article, variant, options)
 
-                            variant.properties.each do |property|
-                              option = {
-                                group: property[:label],
-                                option: property[:value]
-                              }
+                            variant = @client.create_variant data
 
-                              data[:configuratorOptions] << option
-                            end
-
-                            properties[:variants] << data
-
-                            article = @client.update_article id, properties
-
-                            if article
-                              pp article
-                            else
-                              error 'Uuuuuppppss something went wrong while creating variants.', indent: true if options.verbose?
+                            if not variant
+                              error 'Uuuuuppppss, something went wrong while creating variant.', indent: true if options.verbose?
                             end
                           end
                         else
-                          error 'Uuuuuppppss something went wrong while creating product.', indent: true if options.verbose?
+                          error 'Uuuuuppppss, something went wrong while creating product.', indent: true if options.verbose?
                         end
                       else
                         warning 'Product already exists, skipping...', indent: true if options.verbose?
@@ -141,6 +81,66 @@ module Shopware
               end
 
               private
+
+              def get_article_data(product, options)
+                data = {
+                  name: product.name,
+                  descriptionLong: product.description,
+                  supplier: product.supplier,
+                  tax: 19,
+                  mainDetail: {
+                    number: product.number,
+                    prices: [
+                      {
+                        customerGroupKey: 'EK',
+                        price: options.price
+                      }
+                    ]
+                  },
+                  configuratorSet: {
+                    groups: []
+                  },
+                  active: true
+                }
+
+                content_configurator_set = {
+                  name: options.content_configurator_set_name,
+                  options: []
+                }
+
+                product.content_options.each do |option|
+                  content_configurator_set[:options] << { name: option }
+                end
+
+                data[:configuratorSet][:groups] << content_configurator_set
+
+                data
+              end
+
+              def get_variant_data(article, variant, options)
+                data = {
+                  articleId: article['id'],
+                  number: variant.number,
+                  supplierNumber: variant.supplier_number,
+                  additionnaltext: variant.content,
+                  inStock: options.in_stock,
+                  configuratorOptions: [],
+                  prices: [
+                    {
+                      customerGroupKey: 'EK',
+                      price: options.price
+                    }
+                  ],
+                  active: true
+                }
+
+                data[:configuratorOptions] << {
+                  group: options.content_configurator_set_name,
+                  option: variant.content
+                }
+
+                data
+              end
 
               def find_or_create_category(name:, template:, parent_id:, text: nil)
                 transient = @client.find_category_by_name name

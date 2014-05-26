@@ -9,7 +9,7 @@ module Shopware
           def self.included(thor)
             thor.class_eval do
               desc 'show ID', 'Show category with ID'
-              class_option :dump, type: :boolean, default: false, aliases: '-d'
+              option :dump, type: :boolean, default: false, aliases: '-d'
               def show(id)
                 category = @client.get_category id
 

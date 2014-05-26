@@ -67,6 +67,8 @@ module Shopware
 
                 variant.number          = generate_number
                 variant.supplier_number = number
+                variant.content_value   = one[:content_value]
+                variant.content_unit    = one[:content_unit]
 
                 properties = column(:property, material).uniq
 
@@ -76,7 +78,7 @@ module Shopware
                   }, material)
 
                   label       = property
-                  test_method = data[:test_method]
+                  test_method = data[:property_test_method]
                   value       = data[:property_value]
 
                   label = "#{property} (#{test_method})" if test_method
@@ -114,7 +116,7 @@ module Shopware
             private
 
             def generate_number
-              SecureRandom.uuid
+              SecureRandom.hex 10
             end
 
             def search(criterions)

@@ -2,6 +2,7 @@ require 'thor'
 
 require 'shopware/cli/subcommands/articles_subcommand'
 require 'shopware/cli/subcommands/categories_subcommand'
+require 'shopware/cli/subcommands/variants_subcommand'
 require 'shopware/cli/subcommands/mannol_subcommand'
 
 module Shopware
@@ -17,6 +18,9 @@ module Shopware
 
       desc 'categories [SUBCOMMAND]', 'Manage categories'
       subcommand 'categories', Subcommands::CategoriesSubcommand
+
+      desc 'variants [SUBCOMMAND]', 'Manage variants'
+      subcommand 'variants', Subcommands::VariantsSubcommand
 
       desc 'mannol [SUBCOMMAND]', 'Mannol specific commands'
       subcommand 'mannol', Subcommands::MannolSubcommand

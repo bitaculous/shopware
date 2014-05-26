@@ -74,6 +74,20 @@ $ shopware categories show <ID>
 $ shopware categories delete <ID>
 ```
 
+### Variants
+
+#### Show variant
+
+```
+$ shopware variants show <ID>
+```
+
+#### Delete variant
+
+```
+$ shopware variants delete <ID>
+```
+
 ### Mannol
 
 #### Create a base article

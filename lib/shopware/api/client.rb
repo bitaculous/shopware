@@ -2,6 +2,7 @@ require 'httparty'
 
 require 'shopware/api/client/articles'
 require 'shopware/api/client/categories'
+require 'shopware/api/client/variants'
 
 module Shopware
   module API
@@ -22,6 +23,8 @@ module Shopware
       include Articles
 
       include Categories
+
+      include Variants
     end
   end
 end
