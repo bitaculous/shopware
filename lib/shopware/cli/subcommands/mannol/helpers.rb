@@ -9,7 +9,6 @@ module Shopware
               option :name, type: :string, default: 'Öl'
               option :supplier, type: :string, default: 'MANNOL'
               option :number, type: :string, default: '00000000001'
-
               def create_base_article
                 properties = {
                   name: options.name,
@@ -37,6 +36,22 @@ module Shopware
 
                 if article
                   ok 'Article created.'
+                else
+                  error 'Uuuuuppppss, something went wrong.'
+                end
+              end
+
+              desc 'create_oil_property_group', 'Create oil property group'
+              option :name, type: :string, default: 'Öl'
+              def create_oil_property_group
+                properties = {
+                  name: options.name
+                }
+
+                property_group = @client.create_property_group properties
+
+                if property_group
+                  ok 'Property group created.'
                 else
                   error 'Uuuuuppppss, something went wrong.'
                 end

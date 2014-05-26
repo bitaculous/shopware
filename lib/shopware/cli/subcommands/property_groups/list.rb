@@ -15,7 +15,7 @@ module Shopware
                 if quantity > 0
                   table = Terminal::Table.new headings: ['ID', 'Name']
 
-                  get_property_groups.each_with_index do |get_property_group|
+                  property_groups.each_with_index do |get_property_group|
                     id   = get_property_group['id']
                     name = get_property_group['name']
 
