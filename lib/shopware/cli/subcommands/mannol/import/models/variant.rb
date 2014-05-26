@@ -17,7 +17,20 @@ module Shopware
               end
 
               def content
-                content_unit ? "#{content_value} #{content_unit}" : content_value
+                content_unit ? "#{content_value} #{shopware_unit content_unit}" : content_value
+              end
+
+              def shopware_unit(unit)
+                case unit
+                when 'L'
+                  'Liter'
+                when 'Kg'
+                  'Kilogramm'
+                when 'g'
+                  'Gramm'
+                else
+                  unit
+                end
               end
             end
           end

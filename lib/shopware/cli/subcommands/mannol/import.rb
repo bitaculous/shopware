@@ -122,7 +122,7 @@ module Shopware
                   articleId: article['id'],
                   number: variant.number,
                   supplierNumber: variant.supplier_number,
-                  additionnaltext: variant.content,
+                  additionnalText: variant.content,
                   inStock: options.in_stock,
                   configuratorOptions: [],
                   prices: [

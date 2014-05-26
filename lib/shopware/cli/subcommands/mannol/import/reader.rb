@@ -65,7 +65,7 @@ module Shopware
                   number: number
                 }, material)
 
-                variant.number          = generate_number
+                variant.number          = number
                 variant.supplier_number = number
                 variant.content_value   = one[:content_value]
                 variant.content_unit    = one[:content_unit]
