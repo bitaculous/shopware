@@ -13,8 +13,9 @@ module Shopware
           def self.included(thor)
             thor.class_eval do
               desc 'import [FILE]', 'Import products as a CSV file'
-              option :root_category_id, type: :string, required: true
-              option :car_manufacturer_category_id, type: :string, required: true
+              option :root_category_id, type: :numeric, required: true
+              option :car_manufacturer_category_id, type: :numeric, required: true
+              option :filter_group_id, type: :numeric, required: true
               option :defaults, type: :hash, default: {
                 'price'                         => 999,
                 'in_stock'                      => 15,
@@ -221,6 +222,29 @@ module Shopware
                   configuratorSet: {
                     groups: []
                   },
+                  propertyGroupId: options.property_group_id,
+                  propertyValues: [
+                    {
+                      option: {
+                        name: 'Farbe'
+                      },
+                      value: 'Gelb'
+                    },
+
+                    {
+                      option: {
+                        name: 'Farbe'
+                      },
+                      value: 'Grün'
+                    },
+
+                    {
+                      option: {
+                        name: 'Farbe'
+                      },
+                      value: 'Rot'
+                    }
+                  ],
                   categories: [],
                   active: true
                 }

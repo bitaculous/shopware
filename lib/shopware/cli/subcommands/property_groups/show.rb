@@ -15,12 +15,18 @@ module Shopware
 
                 if property_group
                   if not options.dump
-                    id   = property_group['id']
-                    name = property_group['name']
+                    id         = property_group['id']
+                    name       = property_group['name']
+                    position   = property_group['position']
+                    comparable = property_group['comparable']
+                    sort_mode  = property_group['sortMode']
 
                     table = Terminal::Table.new headings: ['Property', 'Value'] do |table|
-                      table << ['ID', id]     if id
-                      table << ['Name', name] if name
+                      table << ['ID', id]                 if id
+                      table << ['Name', name]             if name
+                      table << ['Position', position]     if position
+                      table << ['Comparable', comparable] if comparable
+                      table << ['Sort mode', sort_mode]   if sort_mode
                     end
 
                     puts table

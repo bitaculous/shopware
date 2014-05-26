@@ -43,9 +43,16 @@ module Shopware
 
               desc 'create_oil_property_group', 'Create oil property group'
               option :name, type: :string, default: 'Öl'
+              option :position, type: :numeric, default: 1
+              option :comparable, type: :numeric, default: 1
+              option :sort_mode, type: :numeric, default: 2
+
               def create_oil_property_group
                 properties = {
-                  name: options.name
+                  name: options.name,
+                  position: options.position,
+                  comparable: options.comparable,
+                  sortMode: options.sort_mode
                 }
 
                 property_group = @client.create_property_group properties
