@@ -18,6 +18,7 @@ module Shopware
               option :category_template, type: :string, default: 'article_listing_1col.tpl'
               option :price, type: :numeric, default: 999
               option :in_stock, type: :numeric, default: 15
+              option :stockmin, type: :numeric, default: 1
               option :content_configurator_set_name, type: :string, default: 'Inhalt'
               def import(file)
                 if File.exist? file
@@ -49,7 +50,11 @@ module Shopware
                         article = @client.create_article data
 
                         if article
-                          product.variants.each do |variant|
+                          variants = product.variants
+
+                          variants.sort! { |x, y| x.purchase_unit <=> y.purchase_unit }
+
+                          variants.each do |variant|
                             data = get_variant_data(article, variant, options)
 
                             variant = @client.create_variant data
@@ -122,15 +127,19 @@ module Shopware
                   articleId: article['id'],
                   number: variant.number,
                   supplierNumber: variant.supplier_number,
-                  additionnalText: variant.content,
+                  additionaltext: variant.content,
+                  purchaseUnit: variant.purchase_unit,
+                  referenceUnit: variant.reference_unit,
+                  unitId: variant.unit_id,
                   inStock: options.in_stock,
-                  configuratorOptions: [],
+                  stockmin: options.stockmin,
                   prices: [
                     {
                       customerGroupKey: 'EK',
                       price: options.price
                     }
                   ],
+                  configuratorOptions: [],
                   active: true
                 }
 

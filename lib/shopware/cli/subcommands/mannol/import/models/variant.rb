@@ -17,17 +17,34 @@ module Shopware
               end
 
               def content
-                content_unit ? "#{content_value} #{shopware_unit content_unit}" : content_value
+                content_unit ? "#{content_value} #{convert_unit content_unit}" : content_value
               end
 
-              def shopware_unit(unit)
+              def purchase_unit
+                content_value.to_f
+              end
+
+              def reference_unit
+                1.to_f
+              end
+
+              def unit_id
+                case @content_unit
+                when 'L'
+                  1
+                when 'Kg'
+                  6
+                else
+                  nil
+                end
+              end
+
+              def convert_unit(unit)
                 case unit
                 when 'L'
                   'Liter'
                 when 'Kg'
                   'Kilogramm'
-                when 'g'
-                  'Gramm'
                 else
                   unit
                 end
