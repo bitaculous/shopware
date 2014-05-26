@@ -5,6 +5,11 @@
 
 [![Travis CI Status](https://travis-ci.org/bitaculous/shopware.svg)](http://travis-ci.org/bitaculous/shopware) [![Gemnasium Status](https://gemnasium.com/bitaculous/shopware.svg)](https://gemnasium.com/bitaculous/shopware)
 
+Warning
+-------
+
+Although potentially exciting, this is still really a WIP, use at your own risk.
+
 Installation
 ------------
 
