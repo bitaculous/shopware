@@ -8,11 +8,16 @@ module Shopware
               attr_accessor :number, :supplier_number, :content_value, :content_unit, :small_image, :big_image
 
               def content
-                @content_unit ? "#{@content_value} #{convert_unit @content_unit}" : @content_value if @content_value
+                content_value = self.content_value
+                content_unit  = self.content_unit
+
+                content_unit ? "#{content_value} #{convert_unit content_unit}" : content_value if content_value
               end
 
               def purchase_unit
-                @content_value.to_f if @content_value
+                content_value = self.content_value
+
+                content_value.to_f if content_value
               end
 
               def reference_unit
@@ -20,7 +25,7 @@ module Shopware
               end
 
               def unit_id
-                case @content_unit
+                case self.content_unit
                 when 'L'
                   1
                 when 'Kg'

@@ -10,17 +10,35 @@ module Shopware
                             :car_manufacturer_categories, :car_categories, :variants
 
               def initialize
-                @properties = []
+                @properties, @car_manufacturer_categories, @car_categories, @variants = [], [], [], []
+              end
 
-                @car_manufacturer_categories = []
+              def category=(value)
+                @category = value.strip if value
+              end
 
-                @car_categories = []
+              def subcategory=(value)
+                @subcategory = value.strip if value
+              end
 
-                @variants = []
+              def subcategory_description=(value)
+                @subcategory_description = value.strip if value
+              end
+
+              def subsubcategory=(value)
+                @subsubcategory = value.strip if value
+              end
+
+              def car_manufacturer_categories=(value)
+                @car_manufacturer_categories = value.strip if value
+              end
+
+              def car_categories=(value)
+                @car_categories = value.strip if value
               end
 
               def content_options
-                @variants.map { |variant| variant.content }.compact
+                self.variants.map { |variant| variant.content }.compact
               end
             end
           end
