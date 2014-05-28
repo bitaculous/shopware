@@ -5,9 +5,9 @@ module Shopware
         module Import
           module Models
             class Product
-              attr_accessor :number, :code, :order_number, :name, :description, :supplier, :properties, :category,
-                            :subcategory, :subcategory_description, :subsubcategory, :car_manufacturer_categories,
-                            :car_categories, :variants
+              attr_accessor :number, :code, :order_number, :name, :description, :supplier, :properties, :small_image,
+                            :big_image, :category, :subcategory, :subcategory_description, :subsubcategory,
+                            :car_manufacturer_categories, :car_categories, :variants
 
               def initialize
                 @properties = []

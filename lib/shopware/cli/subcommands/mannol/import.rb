@@ -4,6 +4,7 @@ require 'shopware/cli/subcommands/mannol/import/models/product'
 require 'shopware/cli/subcommands/mannol/import/models/variant'
 require 'shopware/cli/subcommands/mannol/import/reader'
 require 'shopware/cli/subcommands/mannol/import/validators/product'
+require 'shopware/cli/subcommands/mannol/import/validators/variant'
 
 module Shopware
   module CLI
@@ -16,7 +17,11 @@ module Shopware
               option :root_category_id, type: :numeric, required: true
               option :car_manufacturer_category_id, type: :numeric, required: true
               option :filter_group_id, type: :numeric, required: true
+              option :asset_host, type: :string, default: 'sct-catalogue.de'
+              option :small_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/small'
+              option :big_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/big'
               option :enclose_descriptions, type: :boolean, default: true
+              option :number_of_products, type: :numeric, default: -1
               option :defaults, type: :hash, default: {
                 'price'                         => 999,
                 'in_stock'                      => 15,
@@ -41,13 +46,15 @@ module Shopware
                   quantity = products.length
 
                   products.each_with_index do |product, i|
+                    return if i == options.number_of_products
+
                     index = i + 1
 
                     info "Processing #{index}. product “#{product.name}” of #{quantity}..." if options.verbose?
 
-                    validator = Validators::Product.new product
+                    product_validator = Validators::Product.new product
 
-                    if validator.valid?
+                    if product_validator.valid?
                       article = @client.find_article_by_name product.name
 
                       if not article
@@ -63,12 +70,18 @@ module Shopware
                           variants.sort! { |x, y| x.purchase_unit <=> y.purchase_unit }
 
                           variants.each do |variant|
-                            data = get_variant_data(article: article, variant: variant, options: options, defaults: defaults)
+                            variant_validator = Validators::Variant.new variant
 
-                            variant = @client.create_variant data
+                            if variant_validator.valid?
+                              data = get_variant_data(article: article, variant: variant, options: options, defaults: defaults)
 
-                            if not variant
-                              error 'Uuuuuppppss, something went wrong while creating variant.', indent: true if options.verbose?
+                              variant = @client.create_variant data
+
+                              if not variant
+                                error 'Uuuuuppppss, something went wrong while creating variant.', indent: true if options.verbose?
+                              end
+                            else
+                              error 'Variant is not valid, skipping...', indent: true if options.verbose?
                             end
                           end
                         else
@@ -212,8 +225,10 @@ module Shopware
                 description     = product.description
                 supplier        = product.supplier
                 number          = product.number
-                content_options = product.content_options
+                small_image     = product.small_image
+                big_image       = product.big_image
                 properties      = product.properties
+                content_options = product.content_options
 
                 description = enclose description if options.enclose_descriptions
 
@@ -232,26 +247,20 @@ module Shopware
                       }
                     ]
                   },
-                  configuratorSet: {
-                    groups: []
-                  },
+                  images: [],
                   filterGroupId: options.filter_group_id,
                   propertyValues: [],
                   categories: [],
+                  configuratorSet: {
+                    groups: []
+                  },
                   active: true
                 }
 
-                if not content_options.empty?
-                  content_configurator_set = {
-                    name: defaults['content_configurator_set_name'],
-                    options: []
-                  }
+                image = find_image(small_image: small_image, big_image: big_image, options: options)
 
-                  content_options.each do |option|
-                    content_configurator_set[:options] << { name: option } if option
-                  end
-
-                  data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
+                if image
+                  data[:images] << { link: image }
                 end
 
                 if not properties.empty?
@@ -275,6 +284,19 @@ module Shopware
                   end
                 end
 
+                if not content_options.empty?
+                  content_configurator_set = {
+                    name: defaults['content_configurator_set_name'],
+                    options: []
+                  }
+
+                  content_options.each do |option|
+                    content_configurator_set[:options] << { name: option } if option
+                  end
+
+                  data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
+                end
+
                 data
               end
 
@@ -286,6 +308,8 @@ module Shopware
                 purchase_unit   = variant.purchase_unit
                 reference_unit  = variant.reference_unit
                 unit_id         = variant.unit_id
+                small_image     = variant.small_image
+                big_image       = variant.big_image
 
                 data = {
                   articleId: article_id,
@@ -303,9 +327,16 @@ module Shopware
                       price: defaults['price']
                     }
                   ],
+                  images: [],
                   configuratorOptions: [],
                   active: true
                 }
+
+                image = find_image(small_image: small_image, big_image: big_image, options: options)
+
+                if image
+                  data[:images] << { link: image }
+                end
 
                 if content
                   data[:configuratorOptions] << {
@@ -315,6 +346,46 @@ module Shopware
                 end
 
                 data
+              end
+
+              def find_image(small_image:, big_image:, options:)
+                asset_host       = options.asset_host
+                small_image_path = options.small_image_path
+                big_image_path   = options.big_image_path
+
+                if big_image
+                  uri = URI::HTTP.build({
+                    host: asset_host,
+                    path: "#{big_image_path}/#{big_image}.jpg"
+                  })
+
+                  return uri.to_s if uri_exist? uri
+                end
+
+                if small_image
+                  big_image = small_image.sub 's', 'b'
+
+                  uri = URI::HTTP.build({
+                    host: asset_host,
+                    path: "#{big_image_path}/#{big_image}.jpg"
+                  })
+
+                  return uri.to_s if uri_exist? uri
+
+                  uri = URI::HTTP.build({
+                    host: asset_host,
+                    path: "#{small_image_path}/#{small_image}.jpg"
+                  })
+
+                  return uri.to_s if uri_exist? uri
+                end
+              end
+
+              def uri_exist?(uri)
+                request  = Net::HTTP.new uri.host, uri.port
+                response = request.request_head uri.path
+
+                response.code == '200'
               end
 
               def find_or_create_category(name:, template:, parent_id:, text: nil)

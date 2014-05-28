@@ -71,6 +71,9 @@ module Shopware
                 end
               end
 
+              product.small_image = entity[:small_image]
+              product.big_image   = entity[:big_image]
+
               product.category                = entity[:category]
               product.subcategory             = entity[:subcategory]
               product.subcategory_description = entity[:subcategory_description]
@@ -117,8 +120,8 @@ module Shopware
                 variant.supplier_number = number
                 variant.content_value   = one[:content_value]
                 variant.content_unit    = one[:content_unit]
-                variant.image_small     = one[:image_small]
-                variant.image_big       = one[:image_big]
+                variant.small_image     = one[:small_image]
+                variant.big_image       = one[:big_image]
 
                 product.variants.push variant
               end
