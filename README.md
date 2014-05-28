@@ -124,7 +124,9 @@ $ shopware mannol create_base_article
 #### Import products as a CSV file
 
 ```
-$ shopware mannol import <file>
+$ shopware mannol import <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id>
+
+$ shopware mannol import <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id> --number_of_products=<number_of_products> --verbose
 ```
 
 Client
