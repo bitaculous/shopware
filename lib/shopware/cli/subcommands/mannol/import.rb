@@ -16,6 +16,7 @@ module Shopware
               option :root_category_id, type: :numeric, required: true
               option :car_manufacturer_category_id, type: :numeric, required: true
               option :filter_group_id, type: :numeric, required: true
+              option :enclose_descriptions, type: :boolean, default: true
               option :defaults, type: :hash, default: {
                 'price'                         => 999,
                 'in_stock'                      => 15,
@@ -116,6 +117,8 @@ module Shopware
                     if subcategory
                       description = product.subcategory_description
 
+                      description = enclose description if options.enclose_descriptions
+
                       subcategory = find_or_create_category(
                         name: subcategory,
                         text: description,
@@ -205,13 +208,22 @@ module Shopware
               end
 
               def get_article_data(product:, categories:, options:, defaults:)
+                name            = product.name
+                description     = product.description
+                supplier        = product.supplier
+                number          = product.number
+                content_options = product.content_options
+                properties      = product.properties
+
+                description = enclose description if options.enclose_descriptions
+
                 data = {
-                  name: product.name,
-                  descriptionLong: product.description,
-                  supplier: product.supplier,
+                  name: name,
+                  descriptionLong: description,
+                  supplier: supplier,
                   tax: 19,
                   mainDetail: {
-                    number: product.number,
+                    number: number,
                     propertyGroup: '2',
                     prices: [
                       {
@@ -229,8 +241,6 @@ module Shopware
                   active: true
                 }
 
-                content_options = product.content_options
-
                 if not content_options.empty?
                   content_configurator_set = {
                     name: defaults['content_configurator_set_name'],
@@ -243,8 +253,6 @@ module Shopware
 
                   data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
                 end
-
-                properties = product.properties
 
                 if not properties.empty?
                   properties.each do |property|
@@ -271,14 +279,22 @@ module Shopware
               end
 
               def get_variant_data(article:, variant:, options:, defaults:)
+                article_id      = article['id']
+                number          = variant.number
+                supplier_number = variant.supplier_number
+                content         = variant.content
+                purchase_unit   = variant.purchase_unit
+                reference_unit  = variant.reference_unit
+                unit_id         = variant.unit_id
+
                 data = {
-                  articleId: article['id'],
-                  number: variant.number,
-                  supplierNumber: variant.supplier_number,
-                  additionaltext: variant.content,
-                  purchaseUnit: variant.purchase_unit,
-                  referenceUnit: variant.reference_unit,
-                  unitId: variant.unit_id,
+                  articleId: article_id,
+                  number: number,
+                  supplierNumber: supplier_number,
+                  additionaltext: content,
+                  purchaseUnit: purchase_unit,
+                  referenceUnit: reference_unit,
+                  unitId: unit_id,
                   inStock: defaults['in_stock'],
                   stockmin: defaults['stockmin'],
                   prices: [
@@ -290,8 +306,6 @@ module Shopware
                   configuratorOptions: [],
                   active: true
                 }
-
-                content = variant.content
 
                 if content
                   data[:configuratorOptions] << {
@@ -351,6 +365,10 @@ module Shopware
 
                   @client.update_category transient['id'], properties
                 end
+              end
+
+              def enclose(text)
+                "<p>#{text}</p>" if text
               end
             end
           end
