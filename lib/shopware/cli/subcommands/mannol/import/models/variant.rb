@@ -25,8 +25,6 @@ module Shopware
                   1
                 when 'Kg'
                   6
-                else
-                  nil
                 end
               end
 
