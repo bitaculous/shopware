@@ -59,13 +59,16 @@ module Shopware
                   property: property
                 }, full)
 
-                name        = property
-                test_method = data[:property_test_method]
-                value       = data[:property_value]
+                value = data[:property_value]
 
-                name = "#{property} (#{test_method})" if test_method
+                if value
+                  name        = property
+                  test_method = data[:property_test_method]
 
-                product.properties << { name: name, value: value }
+                  name = "#{name} (#{test_method})" if test_method
+
+                  product.properties << { name: name, value: value }
+                end
               end
 
               product.category                = entity[:category]
