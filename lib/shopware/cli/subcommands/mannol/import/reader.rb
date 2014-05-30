@@ -12,13 +12,13 @@ module Shopware
           class Reader
             attr_reader :csv, :headers, :quantity
 
-            def initialize(file, col_sep = '|', quote_char = '"')
+            def initialize(file:, column_separator: '|', quote_character: '"')
               options = {
                 headers: :first_row,
                 header_converters: :symbol,
                 converters: [:numeric, :float],
-                col_sep: col_sep,
-                quote_char: quote_char
+                col_sep: column_separator,
+                quote_char: quote_character
               }
 
               @csv      = CSV.read file, options
@@ -37,13 +37,18 @@ module Shopware
             def product(name)
               product = Models::Product.new
 
-              full = search({
-                name: name
-              })
+              full = search(
+                criterions: {
+                  name: name
+                }
+              )
 
-              entity = find({
-                name: name
-              }, full)
+              entity = find(
+                criterions: {
+                  name: name
+                },
+                data: full
+              )
 
               product.number       = generate_number
               product.name         = name
@@ -52,12 +57,18 @@ module Shopware
               product.description  = entity[:description]
               product.supplier     = entity[:supplier]
 
-              properties = column(:property, full).compact.uniq
+              properties = column(
+                key: :property,
+                data: full
+              )
 
               properties.each do |property|
-                data = find({
-                  property: property
-                }, full)
+                data = find(
+                  criterions: {
+                    property: property
+                  },
+                  data: full
+                )
 
                 value = data[:property_value]
 
@@ -79,20 +90,29 @@ module Shopware
               product.subcategory_description = entity[:subcategory_description]
               product.subsubcategory          = entity[:subsubcategory]
 
-              car_manufacturer_categories = column(:car_manufacturer_category, full).compact.uniq
+              car_manufacturer_categories = column(
+                key: :car_manufacturer_category,
+                data: full
+              )
 
               if not car_manufacturer_categories.empty?
                 car_manufacturer_categories.each do |car_manufacturer_category|
                   product.car_manufacturer_categories << { name: car_manufacturer_category }
                 end
 
-                car_categories = column(:car_category, full).compact.uniq
+                car_categories = column(
+                  key: :car_category,
+                  data: full
+                )
 
                 if not car_categories.empty?
                   car_categories.each do |car_category|
-                    data = find({
-                      car_category: car_category
-                    }, full)
+                    data = find(
+                      criterions: {
+                        car_category: car_category
+                      },
+                      data: full
+                    )
 
                     car_manufacturer = data[:car_manufacturer_category]
 
@@ -103,18 +123,27 @@ module Shopware
                 end
               end
 
-              numbers = column(:number, full).uniq
+              numbers = column(
+                key: :number,
+                data: full
+              )
 
               numbers.each do |number|
                 variant = Models::Variant.new
 
-                material = find_all({
-                  number: number
-                }, full)
+                material = find_all(
+                  criterions: {
+                    number: number
+                  },
+                  data: full
+                )
 
-                one = find({
-                  number: number
-                }, material)
+                one = find(
+                  criterions: {
+                    number: number
+                  },
+                  data: material
+                )
 
                 variant.number          = number
                 variant.supplier_number = number
@@ -135,7 +164,7 @@ module Shopware
               SecureRandom.hex 10
             end
 
-            def search(criterions)
+            def search(criterions:)
               matches = @csv.find_all do |row|
                 match = true
 
@@ -147,7 +176,7 @@ module Shopware
               end
             end
 
-            def find(criterions, data)
+            def find(criterions:, data:)
               matches = data.find do |row|
                 match = true
 
@@ -159,7 +188,7 @@ module Shopware
               end
             end
 
-            def find_all(criterions, data)
+            def find_all(criterions:, data:)
               matches = data.find_all do |row|
                 match = true
 
@@ -171,8 +200,8 @@ module Shopware
               end
             end
 
-            def column(key, data)
-              data.map { |row| row[key] }
+            def column(key:, data:)
+              data.map { |row| row[key] }.compact.uniq
             end
           end
         end

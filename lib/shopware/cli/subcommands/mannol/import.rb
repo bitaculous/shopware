@@ -35,7 +35,11 @@ module Shopware
                 if File.exist? file
                   info "Processing `#{File.basename file}`..." if options.verbose?
 
-                  reader = Reader.new file, options.import['column_separator'], options.import['quote_character']
+                  reader = Reader.new(
+                    file: file,
+                    column_separator: options.import['column_separator'],
+                    quote_character: options.import['quote_character']
+                  )
 
                   products = reader.products
                   quantity = products.length
@@ -58,22 +62,34 @@ module Shopware
                       article = @client.find_article_by_name product.name
 
                       if not article
-                        categories = categories(product: product, options: options, defaults: defaults)
+                        categories = categories(
+                          product: product,
+                          options: options,
+                          defaults: defaults
+                        )
 
-                        data = get_article_data(product: product, categories: categories, options: options, defaults: defaults)
+                        data = get_article_data(
+                          product: product,
+                          categories: categories,
+                          options: options,
+                          defaults: defaults
+                        )
 
                         article = @client.create_article data
 
                         if article
-                          variants = product.variants
-
-                          variants.sort! { |x, y| x.purchase_unit <=> y.purchase_unit }
+                          variants = product.variants.sort_by { |variant| variant.content_value }
 
                           variants.each do |variant|
                             variant_validator = Validators::Variant.new variant
 
                             if variant_validator.valid?
-                              data = get_variant_data(article: article, variant: variant, options: options, defaults: defaults)
+                              data = get_variant_data(
+                                article: article,
+                                variant: variant,
+                                options: options,
+                                defaults: defaults
+                              )
 
                               variant = @client.create_variant data
 
@@ -257,7 +273,11 @@ module Shopware
                   active: true
                 }
 
-                image = find_image(small_image: small_image, big_image: big_image, options: options)
+                image = find_image(
+                  small_image: small_image,
+                  big_image: big_image,
+                  options: options
+                )
 
                 if image
                   data[:images] << { link: image }
@@ -332,7 +352,11 @@ module Shopware
                   active: true
                 }
 
-                image = find_image(small_image: small_image, big_image: big_image, options: options)
+                image = find_image(
+                  small_image: small_image,
+                  big_image: big_image,
+                  options: options
+                )
 
                 if image
                   data[:images] << { link: image }
