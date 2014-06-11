@@ -19,7 +19,6 @@ module Shopware
                 option :asset_host, type: :string, default: 'sct-catalogue.de'
                 option :small_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/small'
                 option :big_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/big'
-                option :enclose_descriptions, type: :boolean, default: true
                 option :number_of_oils, type: :numeric, default: -1
                 option :defaults, type: :hash, default: {
                   'price'                         => 999,
@@ -50,12 +49,14 @@ module Shopware
 
                       index = i + 1
 
-                      info "Processing #{index}. oil “#{oil.name}” of #{quantity}..." if options.verbose?
+                      name = oil.name
+
+                      info "Processing #{index}. oil “#{name}” of #{quantity}..." if options.verbose?
 
                       oil_validator = Validators::Oil.new oil
 
                       if oil_validator.valid?
-                        article = @client.find_article_by_name oil.name
+                        article = @client.find_article_by_name name
 
                         if not article
                           categories = get_categories_for_oil(
@@ -149,7 +150,7 @@ module Shopware
                       if subcategory
                         description = oil.subcategory_description
 
-                        description = enclose description if options.enclose_descriptions
+                        description = enclose description
 
                         subcategory = find_or_create_category(
                           name: subcategory,
@@ -240,16 +241,16 @@ module Shopware
                 end
 
                 def get_article_data_for_oil(oil:, categories:, options:, defaults:)
+                  number          = oil.number
                   name            = oil.name
                   description     = oil.description
                   supplier        = oil.supplier
-                  number          = oil.number
                   small_image     = oil.small_image
                   big_image       = oil.big_image
                   properties      = oil.properties
                   content_options = oil.content_options
 
-                  description = enclose description if options.enclose_descriptions
+                  description = enclose description
 
                   data = {
                     name: name,
@@ -368,7 +369,7 @@ module Shopware
                   if content
                     data[:configuratorOptions] << {
                       group: defaults['content_configurator_set_name'],
-                      option: variant.content
+                      option: content
                     }
                   end
 

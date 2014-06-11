@@ -7,7 +7,7 @@ module Shopware
         module Import
           module Models
             class Oil < Product
-              attr_accessor :code, :order_number, :description, :supplier, :properties, :small_image, :big_image,
+              attr_accessor :code, :order_number, :description, :properties, :small_image, :big_image,
                             :category, :subcategory, :subcategory_description, :subsubcategory,
                             :car_manufacturer_categories, :car_categories, :variants
 

@@ -131,6 +131,14 @@ $ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car
 $ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id> --number_of_oils=<number_of_oils> --verbose
 ```
 
+##### Import care products as a CSV file
+
+```
+$ shopware mannol import_car_products <file> --root-category-id=<root-category-id>
+
+$ shopware mannol import_car_products <file> --root-category-id=<root-category-id> --number_of_care_products=<number_of_care_products> --verbose
+```
+
 Client
 ------
 

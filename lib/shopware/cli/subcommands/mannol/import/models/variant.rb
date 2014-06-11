@@ -28,17 +28,27 @@ module Shopware
                 case self.content_unit
                 when 'L'
                   1
+                when 'g'
+                  2
                 when 'Kg'
                   6
+                when 'ml'
+                  10
                 end
               end
+
+              private
 
               def convert_unit(unit)
                 case unit
                 when 'L'
                   'Liter'
+                when 'g'
+                  'Gramm'
                 when 'Kg'
                   'Kilogramm'
+                when 'ml'
+                  'Milliliter'
                 else
                   unit
                 end
