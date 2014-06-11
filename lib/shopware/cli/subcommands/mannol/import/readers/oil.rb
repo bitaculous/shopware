@@ -1,6 +1,6 @@
 require 'shopware/cli/subcommands/mannol/import/models/oil'
 require 'shopware/cli/subcommands/mannol/import/models/variant'
-require 'shopware/cli/subcommands/mannol/import/readers/base'
+require 'shopware/cli/subcommands/mannol/import/readers/reader'
 
 module Shopware
   module CLI
@@ -8,7 +8,7 @@ module Shopware
       module Mannol
         module Import
           module Readers
-            class Oil < Base
+            class Oil < Reader
               def oils
                 oils = @csv[:name].uniq
 

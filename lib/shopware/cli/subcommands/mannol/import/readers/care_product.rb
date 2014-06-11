@@ -1,5 +1,5 @@
 require 'shopware/cli/subcommands/mannol/import/models/care_product'
-require 'shopware/cli/subcommands/mannol/import/readers/base'
+require 'shopware/cli/subcommands/mannol/import/readers/reader'
 
 module Shopware
   module CLI
@@ -7,7 +7,7 @@ module Shopware
       module Mannol
         module Import
           module Readers
-            class CareProduct < Base
+            class CareProduct < Reader
               def care_products
                 care_products = @csv[:name].uniq
 

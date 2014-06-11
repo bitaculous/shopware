@@ -7,7 +7,7 @@ module Shopware
       module Mannol
         module Import
           module Readers
-            class Base
+            class Reader
               attr_reader :csv, :headers, :quantity
 
               def initialize(file:, column_separator: '|', quote_character: '"')
