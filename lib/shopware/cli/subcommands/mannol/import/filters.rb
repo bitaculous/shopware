@@ -99,8 +99,6 @@ module Shopware
 
                   category = filter.category
 
-                  puts "Foo: #{category}"
-
                   if category
                     category = find_or_create_category(
                       name: category,
