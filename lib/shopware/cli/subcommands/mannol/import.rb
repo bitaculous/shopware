@@ -78,7 +78,7 @@ module Shopware
                         article = @client.create_article data
 
                         if article
-                          variants = product.variants.sort_by { |variant| variant.content_value }
+                          variants = product.variants.sort_by { |variant| variant.send :content_value || 0 }
 
                           variants.each do |variant|
                             variant_validator = Validators::Variant.new variant
@@ -98,6 +98,13 @@ module Shopware
                               end
                             else
                               error 'Variant is not valid, skipping...', indent: true if options.verbose?
+
+                              variant_validator.errors.each do |error|
+                                property = error.first
+                                label    = property.to_s.capitalize
+
+                                error "#{label} not valid.", indent: true if options.verbose?
+                              end
                             end
                           end
                         else
@@ -109,7 +116,7 @@ module Shopware
                     else
                       error 'Product is not valid, skipping...', indent: true if options.verbose?
 
-                      validator.errors.each do |error|
+                      product_validator.errors.each do |error|
                         property = error.first
                         label    = property.to_s.capitalize
 
