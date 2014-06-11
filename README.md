@@ -115,10 +115,10 @@ $ shopware variants delete <ID>
 
 ### Mannol
 
-#### Create a base article
+#### Create oil property group
 
 ```
-$ shopware mannol create_base_article
+$ shopware mannol create_oil_property_group
 ```
 
 #### Imports
