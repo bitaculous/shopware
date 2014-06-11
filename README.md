@@ -128,7 +128,7 @@ $ shopware mannol create_base_article
 ```
 $ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id>
 
-$ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id> --number_of_products=<number_of_products> --verbose
+$ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id> --number_of_oils=<number_of_oils> --verbose
 ```
 
 Client

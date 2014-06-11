@@ -1,5 +1,3 @@
-require 'pp'
-
 require 'shopware/cli/subcommands/mannol/import/models/oil'
 require 'shopware/cli/subcommands/mannol/import/models/variant'
 require 'shopware/cli/subcommands/mannol/import/readers/oil'
@@ -22,7 +20,7 @@ module Shopware
                 option :small_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/small'
                 option :big_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/big'
                 option :enclose_descriptions, type: :boolean, default: true
-                option :number_of_products, type: :numeric, default: -1
+                option :number_of_oils, type: :numeric, default: -1
                 option :defaults, type: :hash, default: {
                   'price'                         => 999,
                   'in_stock'                      => 15,
@@ -47,6 +45,82 @@ module Shopware
 
                     info "Found #{quantity} oil(s)." if options.verbose?
 
+                    oils.each_with_index do |oil, i|
+                      return if i == options.number_of_oils
+
+                      index = i + 1
+
+                      info "Processing #{index}. oil “#{oil.name}” of #{quantity}..." if options.verbose?
+
+                      oil_validator = Validators::Oil.new oil
+
+                      if oil_validator.valid?
+                        article = @client.find_article_by_name oil.name
+
+                        if not article
+                          categories = get_categories_for_oil(
+                            oil: oil,
+                            options: options,
+                            defaults: defaults
+                          )
+
+                          data = get_article_data_for_oil(
+                            oil: oil,
+                            categories: categories,
+                            options: options,
+                            defaults: defaults
+                          )
+
+                          article = @client.create_article data
+
+                          if article
+                            variants = oil.variants.sort_by { |variant| variant.send :content_value || 0 }
+
+                            variants.each do |variant|
+                              variant_validator = Validators::Variant.new variant
+
+                              if variant_validator.valid?
+                                data = get_variant_data_for_oil(
+                                  article: article,
+                                  variant: variant,
+                                  options: options,
+                                  defaults: defaults
+                                )
+
+                                variant = @client.create_variant data
+
+                                if not variant
+                                  error 'Uuuuuppppss, something went wrong while creating variant.', indent: true if options.verbose?
+                                end
+                              else
+                                error 'Variant is not valid, skipping...', indent: true if options.verbose?
+
+                                variant_validator.errors.each do |error|
+                                  property = error.first
+                                  label    = property.to_s.capitalize
+
+                                  error "#{label} not valid.", indent: true if options.verbose?
+                                end
+                              end
+                            end
+                          else
+                            error 'Uuuuuppppss, something went wrong while creating oil.', indent: true if options.verbose?
+                          end
+                        else
+                          warning 'Oil already exists, skipping...', indent: true if options.verbose?
+                        end
+                      else
+                        error 'Oil is not valid, skipping...', indent: true if options.verbose?
+
+                        oil_validator.errors.each do |error|
+                          property = error.first
+                          label    = property.to_s.capitalize
+
+                          error "#{label} not valid.", indent: true if options.verbose?
+                        end
+                      end
+                    end
+
                     ok 'Import finished.'
                   else
                     error "File: `#{file}` not found." if options.verbose?
@@ -55,10 +129,10 @@ module Shopware
 
                 private
 
-                def categories(product:, options:, defaults:)
+                def get_categories_for_oil(oil:, options:, defaults:)
                   categories = []
 
-                  category = product.category
+                  category = oil.category
 
                   if category
                     category = find_or_create_category(
@@ -70,10 +144,10 @@ module Shopware
                     if category
                       categories << category['id']
 
-                      subcategory = product.subcategory
+                      subcategory = oil.subcategory
 
                       if subcategory
-                        description = product.subcategory_description
+                        description = oil.subcategory_description
 
                         description = enclose description if options.enclose_descriptions
 
@@ -87,7 +161,7 @@ module Shopware
                         if subcategory
                           categories << subcategory['id']
 
-                          subsubcategory = product.subsubcategory
+                          subsubcategory = oil.subsubcategory
 
                           if subsubcategory
                             subsubcategory = find_or_create_category(
@@ -111,7 +185,7 @@ module Shopware
                     end
                   end
 
-                  car_manufacturer_categories = product.car_manufacturer_categories
+                  car_manufacturer_categories = oil.car_manufacturer_categories
 
                   if not car_manufacturer_categories.empty?
                     car_manufacturer_categories.each do |car_manufacturer_category|
@@ -131,7 +205,7 @@ module Shopware
                     end
                   end
 
-                  car_categories = product.car_categories
+                  car_categories = oil.car_categories
 
                   if not car_categories.empty?
                     car_categories.each do |car_category|
@@ -165,15 +239,15 @@ module Shopware
                   categories
                 end
 
-                def get_article_data(product:, categories:, options:, defaults:)
-                  name            = product.name
-                  description     = product.description
-                  supplier        = product.supplier
-                  number          = product.number
-                  small_image     = product.small_image
-                  big_image       = product.big_image
-                  properties      = product.properties
-                  content_options = product.content_options
+                def get_article_data_for_oil(oil:, categories:, options:, defaults:)
+                  name            = oil.name
+                  description     = oil.description
+                  supplier        = oil.supplier
+                  number          = oil.number
+                  small_image     = oil.small_image
+                  big_image       = oil.big_image
+                  properties      = oil.properties
+                  content_options = oil.content_options
 
                   description = enclose description if options.enclose_descriptions
 
@@ -249,7 +323,7 @@ module Shopware
                   data
                 end
 
-                def get_variant_data(article:, variant:, options:, defaults:)
+                def get_variant_data_for_oil(article:, variant:, options:, defaults:)
                   article_id      = article['id']
                   number          = variant.number
                   supplier_number = variant.supplier_number
@@ -299,100 +373,6 @@ module Shopware
                   end
 
                   data
-                end
-
-                def find_image(small_image:, big_image:, options:)
-                  asset_host       = options.asset_host
-                  small_image_path = options.small_image_path
-                  big_image_path   = options.big_image_path
-
-                  if big_image
-                    uri = URI::HTTP.build({
-                      host: asset_host,
-                      path: "#{big_image_path}/#{big_image}.jpg"
-                    })
-
-                    return uri.to_s if uri_exist? uri
-                  end
-
-                  if small_image
-                    big_image = small_image.sub 's', 'b'
-
-                    uri = URI::HTTP.build({
-                      host: asset_host,
-                      path: "#{big_image_path}/#{big_image}.jpg"
-                    })
-
-                    return uri.to_s if uri_exist? uri
-
-                    uri = URI::HTTP.build({
-                      host: asset_host,
-                      path: "#{small_image_path}/#{small_image}.jpg"
-                    })
-
-                    return uri.to_s if uri_exist? uri
-                  end
-                end
-
-                def uri_exist?(uri)
-                  request  = Net::HTTP.new uri.host, uri.port
-                  response = request.request_head uri.path
-
-                  response.code == '200'
-                end
-
-                def find_or_create_category(name:, template:, parent_id:, text: nil)
-                  transient = @client.find_category_by_name name
-
-                  if not transient
-                    info "Category “#{name}” does not exists, creating new one...", indent: true if options.verbose?
-
-                    properties = {
-                      name: name,
-                      cmsHeadline: name,
-                      template: template,
-                      parentId: parent_id
-                    }
-
-                    properties[:cmsText] = text if text and not text.empty?
-
-                    category = @client.create_category properties
-
-                    @client.get_category category['id']
-                  else
-                    info "Category “#{name}” already exists.", indent: true if options.verbose?
-
-                    transient
-                  end
-                end
-
-                def create_or_update_category(name:, template:, parent_id:, text: nil)
-                  transient = @client.find_category_by_name name
-
-                  properties = {
-                    name: name,
-                    cmsHeadline: name,
-                    template: template,
-                    parentId: parent_id
-                  }
-
-                  properties[:cmsText] = text if text and not text.empty?
-
-                  if not transient
-                    info "Category “#{name}” does not exists, creating new one...", indent: true if options.verbose?
-
-                    category = @client.create_category properties
-
-                    @client.get_category category['id']
-                  else
-                    info "Category “#{name}” already exists, updating category...", indent: true if options.verbose?
-
-                    @client.update_category transient['id'], properties
-                  end
-                end
-
-                def enclose(text)
-                  "<p>#{text}</p>" if text
                 end
               end
             end
