@@ -73,7 +73,7 @@ module Shopware
                           article = @client.create_article data
 
                           if article
-                            variants = care_product.variants.sort_by { |variant| variant.send :content_value || 0 }
+                            variants = care_product.variants.sort_by { |variant| (content_value || 0).to_f }
 
                             variants.each do |variant|
                               variant_validator = Validators::Variant.new variant
