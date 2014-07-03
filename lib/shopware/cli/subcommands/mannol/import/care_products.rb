@@ -176,17 +176,18 @@ module Shopware
                   big_image       = care_product.big_image
                   content_options = care_product.content_options
 
-                  description = enclose description
+                  long_description = enclose description
 
                   if instruction
                     instruction = enclose instruction
 
-                    description += instruction
+                    long_description += instruction
                   end
 
                   data = {
                     name: name,
-                    descriptionLong: description,
+                    description: description,
+                    descriptionLong: long_description,
                     supplier: supplier,
                     tax: 19,
                     mainDetail: {
