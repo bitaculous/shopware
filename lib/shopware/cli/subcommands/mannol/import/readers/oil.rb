@@ -86,6 +86,8 @@ module Shopware
 
                 if not spec_categories.empty?
                   spec_categories.each do |spec_category|
+                    spec_category = spec_category.to_s.strip
+
                     oil.spec_categories << { name: spec_category }
                   end
 
@@ -111,6 +113,8 @@ module Shopware
                         partials = spec_subcategory.split SPEC_SUBCATEGORIES_SPLIT_CHARACTER
 
                         partials.each do |partial|
+                          partial = partial.to_s.strip
+
                           oil.spec_subcategories << { name: partial, spec_category: spec_category }
                         end
                       end

@@ -4,8 +4,6 @@ require 'shopware/cli/subcommands/mannol/import/readers/oil'
 require 'shopware/cli/subcommands/mannol/import/validators/oil'
 require 'shopware/cli/subcommands/mannol/import/validators/variant'
 
-require 'pp'
-
 module Shopware
   module CLI
     module Subcommands

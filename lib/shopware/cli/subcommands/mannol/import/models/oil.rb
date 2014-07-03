@@ -31,14 +31,6 @@ module Shopware
                 @subsubcategory = value.strip if value
               end
 
-              def spec_categories=(value)
-                @spec_categories = value.strip if value
-              end
-
-              def spec_subcategories=(value)
-                @spec_subcategories = value.strip if value
-              end
-
               def content_options
                 self.variants.map { |variant| variant.content }.compact
               end
