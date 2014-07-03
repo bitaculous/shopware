@@ -63,6 +63,10 @@ module Shopware
 
                     name = "#{name} (#{test_method})" if test_method
 
+                    unit = data[:property_unit]
+
+                    value = "#{value} #{unit}" if unit
+
                     oil.properties << { name: name, value: value }
                   end
                 end
