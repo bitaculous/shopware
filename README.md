@@ -3,7 +3,8 @@
 
 **A Ruby client for the Shopware API.**
 
-[![Travis CI Status](https://travis-ci.org/bitaculous/shopware.svg)](http://travis-ci.org/bitaculous/shopware) [![Gemnasium Status](https://gemnasium.com/bitaculous/shopware.svg)](https://gemnasium.com/bitaculous/shopware)
+[![Travis CI Status](https://travis-ci.org/bitaculous/shopware.svg)](http://travis-ci.org/bitaculous/shopware)
+[![Gemnasium Status](https://gemnasium.com/bitaculous/shopware.svg)](https://gemnasium.com/bitaculous/shopware)
 
 Warning
 -------
@@ -126,9 +127,9 @@ $ shopware mannol create_oil_property_group
 ##### Import oils as a CSV file
 
 ```
-$ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id>
+$ shopware mannol import_oils <file> --oil-category-id=<oil-category-id> --spec-category-id=<spec-category-id> --filter-group-id=<filter-group-id>
 
-$ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car-manufacturer-category-id=<car-manufacturer-category-id> --filter_group_id=<filter_group_id> --number_of_oils=<number_of_oils> --verbose
+$ shopware mannol import_oils <file> --oil-category-id=<oil-category-id> --spec-category-id=<spec-category-id> --filter-group-id=<filter-group-id> --number-of-oils=<number-of-oils> --verbose
 ```
 
 ##### Import care products as a CSV file
@@ -136,7 +137,7 @@ $ shopware mannol import_oils <file> --root-category-id=<root-category-id> --car
 ```
 $ shopware mannol import_car_products <file> --root-category-id=<root-category-id>
 
-$ shopware mannol import_car_products <file> --root-category-id=<root-category-id> --number_of_care_products=<number_of_care_products> --verbose
+$ shopware mannol import_car_products <file> --root-category-id=<root-category-id> --number-of-care-products=<number-of-care-products> --verbose
 ```
 
 ##### Import filters as a CSV file
@@ -144,7 +145,7 @@ $ shopware mannol import_car_products <file> --root-category-id=<root-category-i
 ```
 $ shopware mannol filters <file> --root-category-id=<root-category-id>
 
-$ shopware mannol filters <file> --root-category-id=<root-category-id> --number_of_filters=<number_of_filters> --verbose
+$ shopware mannol filters <file> --root-category-id=<root-category-id> --number-of-filters=<number-of-filters> --verbose
 ```
 
 Client
