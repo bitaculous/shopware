@@ -9,10 +9,10 @@ module Shopware
             class Oil < Product
               attr_accessor :code, :order_number, :description, :properties, :small_image, :big_image,
                             :category, :subcategory, :subcategory_description, :subsubcategory,
-                            :car_manufacturer_categories, :car_categories, :variants
+                            :spec_categories, :spec_subcategories, :variants
 
               def initialize
-                @properties, @car_manufacturer_categories, @car_categories, @variants = [], [], [], []
+                @properties, @spec_categories, @spec_subcategories, @variants = [], [], [], []
               end
 
               def category=(value)
@@ -31,12 +31,12 @@ module Shopware
                 @subsubcategory = value.strip if value
               end
 
-              def car_manufacturer_categories=(value)
-                @car_manufacturer_categories = value.strip if value
+              def spec_categories=(value)
+                @spec_categories = value.strip if value
               end
 
-              def car_categories=(value)
-                @car_categories = value.strip if value
+              def spec_subcategories=(value)
+                @spec_subcategories = value.strip if value
               end
 
               def content_options

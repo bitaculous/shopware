@@ -9,6 +9,8 @@ module Shopware
         module Import
           module Readers
             class Oil < Reader
+              SPEC_SUBCATEGORIES_SPLIT_CHARACTER = '/'
+
               def oils
                 oils = @csv[:name].uniq
 
@@ -73,34 +75,40 @@ module Shopware
                 oil.subcategory_description = entity[:subcategory_description]
                 oil.subsubcategory          = entity[:subsubcategory]
 
-                car_manufacturer_categories = column(
-                  key: :car_manufacturer_category,
+                spec_categories = column(
+                  key: :spec_category,
                   data: full
                 )
 
-                if not car_manufacturer_categories.empty?
-                  car_manufacturer_categories.each do |car_manufacturer_category|
-                    oil.car_manufacturer_categories << { name: car_manufacturer_category }
+                if not spec_categories.empty?
+                  spec_categories.each do |spec_category|
+                    oil.spec_categories << { name: spec_category }
                   end
 
-                  car_categories = column(
-                    key: :car_category,
+                  spec_subcategories = column(
+                    key: :spec_subcategory,
                     data: full
                   )
 
-                  if not car_categories.empty?
-                    car_categories.each do |car_category|
+                  if not spec_subcategories.empty?
+                    spec_subcategories.each do |spec_subcategory|
                       data = find(
                         criterions: {
-                          car_category: car_category
+                          spec_subcategory: spec_subcategory
                         },
                         data: full
                       )
 
-                      car_manufacturer = data[:car_manufacturer_category]
+                      spec_category = data[:spec_category]
 
-                      if car_manufacturer
-                        oil.car_categories << { name: car_category, car_manufacturer: car_manufacturer }
+                      if spec_category
+                        spec_subcategory = data[:spec_subcategory].to_s
+
+                        partials = spec_subcategory.split SPEC_SUBCATEGORIES_SPLIT_CHARACTER
+
+                        partials.each do |partial|
+                          oil.spec_subcategories << { name: partial, spec_category: spec_category }
+                        end
                       end
                     end
                   end

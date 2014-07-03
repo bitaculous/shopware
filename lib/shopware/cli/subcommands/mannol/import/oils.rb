@@ -4,6 +4,8 @@ require 'shopware/cli/subcommands/mannol/import/readers/oil'
 require 'shopware/cli/subcommands/mannol/import/validators/oil'
 require 'shopware/cli/subcommands/mannol/import/validators/variant'
 
+require 'pp'
+
 module Shopware
   module CLI
     module Subcommands
@@ -13,8 +15,8 @@ module Shopware
             def self.included(thor)
               thor.class_eval do
                 desc 'import_oils [FILE]', 'Import oils as a CSV file'
-                option :root_category_id, type: :numeric, required: true
-                option :car_manufacturer_category_id, type: :numeric, required: true
+                option :oil_category_id, type: :numeric, required: true
+                option :spec_category_id, type: :numeric, required: true
                 option :filter_group_id, type: :numeric, required: true
                 option :asset_host, type: :string, default: 'sct-catalogue.de'
                 option :small_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/small'
@@ -25,7 +27,8 @@ module Shopware
                   'in_stock'                      => 15,
                   'stockmin'                      => 1,
                   'content_configurator_set_name' => 'Inhalt',
-                  'category_template'             => 'article_listing_1col.tpl'
+                  'category_template'             => 'article_listing_1col.tpl',
+                  'specifications_heading'        => 'Spezifikationen:'
                 }
                 def import_oils(file)
                   defaults = options.defaults
@@ -139,7 +142,7 @@ module Shopware
                     category = find_or_create_category(
                       name: category,
                       template: defaults['category_template'],
-                      parent_id: options.root_category_id
+                      parent_id: options.oil_category_id
                     )
 
                     if category
@@ -186,53 +189,53 @@ module Shopware
                     end
                   end
 
-                  car_manufacturer_categories = oil.car_manufacturer_categories
+                  spec_categories = oil.spec_categories
 
-                  if not car_manufacturer_categories.empty?
-                    car_manufacturer_categories.each do |car_manufacturer_category|
-                      name = car_manufacturer_category[:name]
+                  if not spec_categories.empty?
+                    spec_categories.each do |spec_category|
+                      name = spec_category[:name]
 
-                      car_manufacturer_category = find_or_create_category(
+                      spec_category = find_or_create_category(
                         name: name,
                         template: options.category_template,
-                        parent_id: options.car_manufacturer_category_id
+                        parent_id: options.spec_category_id
                       )
 
-                      if car_manufacturer_category
-                        categories << car_manufacturer_category['id']
+                      if spec_category
+                        categories << spec_category['id']
                       else
-                        error 'Uuuuuppppss, something went wrong while creating car manufacturer category.', indent: true if options.verbose?
+                        error 'Uuuuuppppss, something went wrong while creating spec category.', indent: true if options.verbose?
                       end
                     end
                   end
 
-                  car_categories = oil.car_categories
+                  spec_subcategories = oil.spec_subcategories
 
-                  if not car_categories.empty?
-                    car_categories.each do |car_category|
-                      name             = car_category[:name]
-                      car_manufacturer = car_category[:car_manufacturer]
+                  if not spec_subcategories.empty?
+                    spec_subcategories.each do |spec_subcategory|
+                      name          = spec_subcategory[:name]
+                      spec_category = spec_subcategory[:spec_category]
 
-                      car_manufacturer_category = find_or_create_category(
-                        name: car_manufacturer,
+                      spec_category = find_or_create_category(
+                        name: spec_category,
                         template: options.category_template,
-                        parent_id: options.car_manufacturer_category_id
+                        parent_id: options.spec_category_id
                       )
 
-                      if car_manufacturer_category
-                        car_category = find_or_create_category(
+                      if spec_category
+                        spec_subcategory = find_or_create_category(
                           name: name,
                           template: options.category_template,
-                          parent_id: car_manufacturer_category['id']
+                          parent_id: spec_category['id']
                         )
 
-                        if car_category
-                          categories << car_category['id']
+                        if spec_subcategory
+                          categories << spec_subcategory['id']
                         else
-                          error 'Uuuuuppppss, something went wrong while creating car category.', indent: true if options.verbose?
+                          error 'Uuuuuppppss, something went wrong while creating spec subcategory.', indent: true if options.verbose?
                         end
                       else
-                        error 'Uuuuuppppss, something went wrong while creating car manufacturer category for car category.', indent: true if options.verbose?
+                        error 'Uuuuuppppss, something went wrong while creating spec category for spec subcategory.', indent: true if options.verbose?
                       end
                     end
                   end
@@ -250,11 +253,12 @@ module Shopware
                   properties      = oil.properties
                   content_options = oil.content_options
 
-                  description = enclose description
+                  long_description = get_long_description_for_oil(oil: oil, options: options, defaults: defaults)
 
                   data = {
                     name: name,
-                    descriptionLong: description,
+                    description: description,
+                    descriptionLong: long_description,
                     supplier: supplier,
                     tax: 19,
                     mainDetail: {
@@ -322,6 +326,30 @@ module Shopware
                   end
 
                   data
+                end
+
+                def get_long_description_for_oil(oil:, options:, defaults:)
+                  description = oil.description
+
+                  description_long = enclose description
+
+                  spec_subcategories = oil.spec_subcategories
+
+                  if not spec_subcategories.empty?
+                    specifications = "<h2>#{defaults['specifications_heading']}</h2>"
+
+                    specifications += '<ul>'
+
+                    spec_subcategories.each do |spec_subcategory|
+                      specifications += "<li>#{spec_subcategory[:spec_category]} #{spec_subcategory[:name]}</li>"
+                    end
+
+                    specifications += '</ul>'
+
+                    description_long += specifications
+                  end
+
+                  description_long
                 end
 
                 def get_variant_data_for_oil(article:, variant:, options:, defaults:)
