@@ -127,25 +127,25 @@ $ shopware mannol create_oil_property_group
 ##### Import oils as a CSV file
 
 ```
-$ shopware mannol import_oils <file> --oil-category-id=<oil-category-id> --spec-category-id=<spec-category-id> --filter-group-id=<filter-group-id>
+$ shopware mannol import_oils <file> --oil_category_id=<oil_category_id> --spec_category_id=<spec_category_id> --filter_group_id=<filter-group-id>
 
-$ shopware mannol import_oils <file> --oil-category-id=<oil-category-id> --spec-category-id=<spec-category-id> --filter-group-id=<filter-group-id> --number-of-oils=<number-of-oils> --verbose
+$ shopware mannol import_oils <file> --oil_category_id=<oil_category_id> --spec_category_id=<spec_category_id> --filter_group_id=<filter-group-id> --number_of_oils=<number_of_oils> --verbose
 ```
 
 ##### Import care products as a CSV file
 
 ```
-$ shopware mannol import_car_products <file> --root-category-id=<root-category-id>
+$ shopware mannol import_car_products <file> --root_category_id=<root_category_id>
 
-$ shopware mannol import_car_products <file> --root-category-id=<root-category-id> --number-of-care-products=<number-of-care-products> --verbose
+$ shopware mannol import_car_products <file> --root_category_id=<root_category_id> --number_of_care_products=<number_of_care_products> --verbose
 ```
 
 ##### Import filters as a CSV file
 
 ```
-$ shopware mannol filters <file> --root-category-id=<root-category-id>
+$ shopware mannol filters <file> --root_category_id=<root_category_id>
 
-$ shopware mannol filters <file> --root-category-id=<root-category-id> --number-of-filters=<number-of-filters> --verbose
+$ shopware mannol filters <file> --root_category_id=<root_category_id> --number_of_filters=<number_of_filters> --verbose
 ```
 
 Client
