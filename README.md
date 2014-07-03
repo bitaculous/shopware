@@ -8,7 +8,7 @@
 Warning
 -------
 
-Although potentially exciting, this is still really a WIP, use at your own risk.
+**Although potentially exciting, this is still really a WIP, use at your own risk.**
 
 Installation
 ------------
