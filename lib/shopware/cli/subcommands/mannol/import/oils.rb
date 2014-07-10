@@ -249,7 +249,7 @@ module Shopware
                   small_image     = oil.small_image
                   big_image       = oil.big_image
                   properties      = oil.properties
-                  content_options = oil.content_options
+                  variants        = oil.variants
 
                   long_description = get_long_description_for_oil(oil: oil, options: options, defaults: defaults)
 
@@ -310,14 +310,18 @@ module Shopware
                     end
                   end
 
-                  if not content_options.empty?
+                  if not variants.empty?
                     content_configurator_set = {
                       name: defaults['content_configurator_set_name'],
                       options: []
                     }
 
-                    content_options.each do |option|
-                      content_configurator_set[:options] << { name: option } if option
+                    variants = variants.sort_by { |variant| (variant.content_value || 0).to_f }
+
+                    variants.each_with_index do |variant, index|
+                      option = variant.content
+
+                      content_configurator_set[:options] << { name: option, position: index } if option
                     end
 
                     data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
