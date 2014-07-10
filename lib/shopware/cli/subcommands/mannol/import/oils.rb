@@ -255,6 +255,7 @@ module Shopware
 
                   data = {
                     name: name,
+                    metaTitle: name,
                     description: description,
                     descriptionLong: long_description,
                     supplier: supplier,
@@ -321,7 +322,7 @@ module Shopware
                     variants.each_with_index do |variant, index|
                       option = variant.content
 
-                      content_configurator_set[:options] << { name: option, position: index } if option
+                      content_configurator_set[:options] << { name: option, position: index, shippingTime: 24 } if option
                     end
 
                     data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set

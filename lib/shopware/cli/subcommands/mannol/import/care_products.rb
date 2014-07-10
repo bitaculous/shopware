@@ -186,6 +186,7 @@ module Shopware
 
                   data = {
                     name: name,
+                    metaTitle: name,
                     description: description,
                     descriptionLong: long_description,
                     supplier: supplier,

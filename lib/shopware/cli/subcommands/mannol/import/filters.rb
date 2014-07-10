@@ -139,6 +139,7 @@ module Shopware
 
                   data = {
                     name: name,
+                    metaTitle: name,
                     supplier: supplier,
                     tax: 19,
                     mainDetail: {
