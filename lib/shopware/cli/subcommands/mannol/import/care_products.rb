@@ -167,14 +167,14 @@ module Shopware
                 end
 
                 def get_article_data_for_care_product(care_product:, categories:, options:, defaults:)
-                  number          = care_product.number
-                  name            = care_product.name
-                  description     = care_product.description
-                  instruction     = care_product.instruction
-                  supplier        = care_product.supplier
-                  small_image     = care_product.small_image
-                  big_image       = care_product.big_image
-                  content_options = care_product.content_options
+                  number      = care_product.number
+                  name        = care_product.name
+                  description = care_product.description
+                  instruction = care_product.instruction
+                  supplier    = care_product.supplier
+                  small_image = care_product.small_image
+                  big_image   = care_product.big_image
+                  variants    = care_product.variants
 
                   long_description = enclose description
 
@@ -224,14 +224,18 @@ module Shopware
                     end
                   end
 
-                  if not content_options.empty?
+                  if not variants.empty?
                     content_configurator_set = {
                       name: defaults['content_configurator_set_name'],
                       options: []
                     }
 
-                    content_options.each do |option|
-                      content_configurator_set[:options] << { name: option } if option
+                    variants = variants.sort_by { |variant| (variant.content_value || 0).to_f }
+
+                    variants.each_with_index do |variant, index|
+                      option = variant.content
+
+                      content_configurator_set[:options] << { name: option, position: index } if option
                     end
 
                     data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set

@@ -242,14 +242,14 @@ module Shopware
                 end
 
                 def get_article_data_for_oil(oil:, categories:, options:, defaults:)
-                  number          = oil.number
-                  name            = oil.name
-                  description     = oil.description
-                  supplier        = oil.supplier
-                  small_image     = oil.small_image
-                  big_image       = oil.big_image
-                  properties      = oil.properties
-                  variants        = oil.variants
+                  number      = oil.number
+                  name        = oil.name
+                  description = oil.description
+                  supplier    = oil.supplier
+                  small_image = oil.small_image
+                  big_image   = oil.big_image
+                  properties  = oil.properties
+                  variants    = oil.variants
 
                   long_description = get_long_description_for_oil(oil: oil, options: options, defaults: defaults)
 
