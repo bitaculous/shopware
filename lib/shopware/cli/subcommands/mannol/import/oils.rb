@@ -10,6 +10,8 @@ module Shopware
       module Mannol
         module Import
           module Oils
+            SPEC_CATEGORIES_AS_PROPERTIES = %w[ACEA API SAE]
+
             def self.included(thor)
               thor.class_eval do
                 desc 'import_oils [FILE]', 'Import oils as a CSV file'
@@ -242,14 +244,16 @@ module Shopware
                 end
 
                 def get_article_data_for_oil(oil:, categories:, options:, defaults:)
-                  number      = oil.number
-                  name        = oil.name
-                  description = oil.description
-                  supplier    = oil.supplier
-                  small_image = oil.small_image
-                  big_image   = oil.big_image
-                  properties  = oil.properties
-                  variants    = oil.variants
+                  number             = oil.number
+                  name               = oil.name
+                  description        = oil.description
+                  supplier           = oil.supplier
+                  small_image        = oil.small_image
+                  big_image          = oil.big_image
+                  properties         = oil.properties
+                  spec_categories    = oil.spec_categories
+                  spec_subcategories = oil.spec_subcategories
+                  variants           = oil.variants
 
                   long_description = get_long_description_for_oil(oil: oil, options: options, defaults: defaults)
 
@@ -302,6 +306,23 @@ module Shopware
 
                         value: value
                       }
+                    end
+                  end
+
+                  if not spec_subcategories.empty?
+                    spec_subcategories.each do |spec_subcategory|
+                      name          = spec_subcategory[:name]
+                      spec_category = spec_subcategory[:spec_category]
+
+                      if SPEC_CATEGORIES_AS_PROPERTIES.include? spec_category
+                        data[:propertyValues] << {
+                          option: {
+                            name: spec_category
+                          },
+
+                          value: name
+                        }
+                      end
                     end
                   end
 
