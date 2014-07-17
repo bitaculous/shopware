@@ -108,7 +108,7 @@ module Shopware
                       spec_category = data[:spec_category]
 
                       if spec_category
-                        spec_subcategory = data[:spec_subcategory].to_s
+                        spec_subcategory = data[:spec_subcategory].to_s.strip
 
                         partials = spec_subcategory.split SPEC_SUBCATEGORIES_SPLIT_CHARACTER
 
