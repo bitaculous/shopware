@@ -160,6 +160,5 @@ Shopware is released under the [MIT License (MIT)], see [LICENSE].
 [LICENSE]: https://raw.githubusercontent.com/bitaculous/shopware/master/LICENSE "License"
 [MIT License (MIT)]: http://opensource.org/licenses/MIT "The MIT License (MIT)"
 [Shopware]: http://bitaculous.github.io/shopware "A Ruby client for the Shopware API."
-[specific_install]: https://github.com/rdp/specific_install "Rubygems plugin to allow you to install an 'edge' gem straight from its GitHub repository"
 [Travis CI Status]: http://img.shields.io/travis/bitaculous/shopware.svg?style=flat "Travis CI Status"
 [Travis CI]: https://travis-ci.org/bitaculous/shopware "Shopware at Travis CI"
