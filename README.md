@@ -158,7 +158,7 @@ License
 
 Shopware is released under the [MIT License (MIT)], see [LICENSE].
 
-[client.rb]: https://github.com/bitaculous/shopware/blob/lib/shopware/api/client.rb "client.rub"
+[client.rb]: https://github.com/bitaculous/shopware/blob/master/lib/shopware/api/client.rb "client.rub"
 [Gemnasium Status]: http://img.shields.io/gemnasium/bitaculous/shopware.svg?style=flat "Gemnasium Status"
 [Gemnasium]: https://gemnasium.com/bitaculous/shopware "Shopware at Gemnasium"
 [LICENSE]: https://raw.githubusercontent.com/bitaculous/shopware/master/LICENSE "License"
