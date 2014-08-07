@@ -14,17 +14,13 @@ Warning
 Installation
 ------------
 
-1. Install [specific_install]
+1. Add shopware to your Gemfile:
 
     ```
-    $ gem install specific_install
+    gem 'shopware', github: 'bitaculous/shopware'
     ```
 
-2. Install shopware straight from the GitHub repository
-
-    ```
-    $ gem specific_install https://github.com/bitaculous/shopware.git
-    ```
+2. Run `bundle install`
 
 Usage
 -----
