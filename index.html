@@ -38,17 +38,12 @@
 
 <ol>
 <li>
-<p>Install <a href="https://github.com/rdp/specific_install" title="Rubygems plugin to allow you to install an 'edge' gem straight from its GitHub repository">specific_install</a></p>
+<p>Add shopware to your Gemfile:</p>
 
-<pre><code>$ gem install specific_install
+<pre><code>gem 'shopware', github: 'bitaculous/shopware'
 </code></pre>
 </li>
-<li>
-<p>Install shopware straight from the GitHub repository</p>
-
-<pre><code>$ gem specific_install https://github.com/bitaculous/shopware.git
-</code></pre>
-</li>
+<li><p>Run <code>bundle install</code></p></li>
 </ol><h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
@@ -180,7 +175,7 @@ $ shopware mannol filters &lt;file&gt; --root_category_id=&lt;root_category_id&g
 <h2>
 <a name="client" class="anchor" href="#client"><span class="octicon octicon-link"></span></a>Client</h2>
 
-<p>See <a href="https://github.com/bitaculous/shopware/blob/lib/shopware/api/client.rb" title="client.rub">client.rb</a>.</p>
+<p>See <a href="https://github.com/bitaculous/shopware/blob/master/lib/shopware/api/client.rb" title="client.rub">client.rb</a>.</p>
 
 <h2>
 <a name="code-status" class="anchor" href="#code-status"><span class="octicon octicon-link"></span></a>Code status</h2>
