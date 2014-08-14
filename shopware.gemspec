@@ -6,18 +6,18 @@ $:.unshift lib unless $:.include? lib
 require 'shopware/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'shopware'
-  spec.summary       = 'A Ruby client for the Shopware API.'
-  spec.author        = 'Maik Kempe'
-  spec.email         = 'mkempe@bitaculous.com'
-  spec.homepage      = 'http://bitaculous.github.io/shopware'
-  spec.version       = Shopware::VERSION
-  spec.platform      = Gem::Platform::RUBY
-  spec.licenses      = 'MIT'
+  spec.name        = 'shopware'
+  spec.summary     = 'A Ruby client for the Shopware API.'
+  spec.author      = 'Maik Kempe'
+  spec.email       = 'mkempe@bitaculous.com'
+  spec.homepage    = 'http://bitaculous.github.io/shopware'
+  spec.version     = Shopware::VERSION
+  spec.platform    = Gem::Platform::RUBY
+  spec.licenses    = 'MIT'
 
-  spec.files         = `git ls-files`.split($\)
-  spec.executables   = spec.files.grep(/^bin/).map { |file| File.basename file }
-  spec.test_files    = spec.files.grep(/^(features|spec|test)/)
+  spec.files       = `git ls-files`.split($\)
+  spec.executables = spec.files.grep(/^bin/).map { |file| File.basename file }
+  spec.test_files  = spec.files.grep(/^(features|spec|test)/)
 
   spec.required_ruby_version = '>= 2.0.0'
 
@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'terminal-table', '~> 1.4.5'
 
-  spec.add_development_dependency 'bundler', '~> 1.6.2'
+  spec.add_development_dependency 'bundler', '~> 1.7.0'
 
   spec.add_development_dependency 'rake', '~> 10.3.2'
 
