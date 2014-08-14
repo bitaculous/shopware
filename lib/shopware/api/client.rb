@@ -17,7 +17,7 @@ module Shopware
       query_string_normalizer proc { |query| query.to_json }
 
       def initialize(options = {})
-        self.class.base_uri options['base_uri']
+        self.class.base_uri options['uri']
         self.class.digest_auth options['username'], options['key']
       end
 

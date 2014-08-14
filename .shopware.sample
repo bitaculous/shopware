@@ -1,7 +1,7 @@
 api:
   username: "api"
   key: "foobar"
-  base_uri: "http://your-awesome-shop.com/api"
+  uri: "http://your-awesome-shop.com/api"
 
 import:
   column_separator: "|"

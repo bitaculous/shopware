@@ -31,7 +31,7 @@ Usage
     api:
       username: "api"
       key: "foobar"
-      base_uri: "http://your-awesome-shop.com/api"
+      uri: "http://your-awesome-shop.com/api"
     ```
 
 2. Run `shopware --help` or `shopware help <command>`
