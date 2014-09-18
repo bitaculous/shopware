@@ -9,6 +9,7 @@
       ],
       "folder_exclude_patterns": [
         ".bundle",
+        "data",
         "pkg"
       ]
     }
