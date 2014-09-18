@@ -19,9 +19,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(/^bin/).map { |file| File.basename file }
   spec.test_files  = spec.files.grep(/^(features|spec|test)/)
 
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = '~> 2.0'
 
-  spec.required_rubygems_version = Gem::Requirement.new '>= 2.0.0'
+  spec.required_rubygems_version = '~> 2.4'
 
   spec.add_dependency 'thor', '~> 0.19.1'
 
@@ -31,9 +31,9 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'terminal-table', '~> 1.4.5'
 
-  spec.add_development_dependency 'bundler', '~> 1.7.0'
+  spec.add_development_dependency 'bundler', '~> 1.7.3'
 
   spec.add_development_dependency 'rake', '~> 10.3.2'
 
-  spec.add_development_dependency 'rspec', '~> 3.0.0'
+  spec.add_development_dependency 'rspec', '~> 3.1.0'
 end
