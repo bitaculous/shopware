@@ -3,14 +3,13 @@
     {
       "name": "shopware",
       "path": "./",
-      "file_exclude_patterns": [
-        "*.sublime-workspace",
-        ".keep"
-      ],
       "folder_exclude_patterns": [
         ".bundle",
         "data",
         "pkg"
+      ],
+      "file_exclude_patterns": [
+        ".keep"
       ]
     }
   ]
