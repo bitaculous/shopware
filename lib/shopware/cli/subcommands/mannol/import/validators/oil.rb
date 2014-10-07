@@ -1,5 +1,6 @@
 require 'validation'
 require 'validation/rule/not_empty'
+require 'validation/rule/numeric'
 
 module Shopware
   module CLI
@@ -11,7 +12,7 @@ module Shopware
               include Validation
 
               rule :number,       :not_empty
-              rule :order_number, :not_empty
+              rule :order_number, :numeric
               rule :name,         :not_empty
               rule :description,  :not_empty
               rule :supplier,     :not_empty
