@@ -8,6 +8,12 @@ module Shopware
           response['data']
         end
 
+        def get_variant_by_number(number)
+          response = self.class.get "/variants/#{number}?useNumberAsId=true"
+
+          response['data']
+        end
+
         def create_variant(properties)
           response = self.class.post '/variants', body: properties
 

@@ -8,10 +8,10 @@ module Shopware
         module Show
           def self.included(thor)
             thor.class_eval do
-              desc 'show ID', 'Show variant with ID'
+              desc 'show NUMBER', 'Show variant with NUMBER'
               option :dump, type: :boolean, default: false, aliases: '-d'
-              def show(id)
-                variant = @client.get_variant id
+              def show(number)
+                variant = @client.get_variant_by_number number
 
                 if variant
                   if not options.dump
