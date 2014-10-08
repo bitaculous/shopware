@@ -78,15 +78,15 @@ module Shopware
                           article = @client.create_article data
 
                           if article
-                            ok "Oil “#{name}” created."
+                            ok "Oil “#{name}” created.", indent: true
                           else
-                            error 'Uuuuuppppss, something went wrong while creating oil.', indent: true if options.verbose?
+                            error "Uuuuuppppss, something went wrong while creating oil “#{name}”.", indent: true if options.verbose?
                           end
                         else
-                          warning 'Oil already exists, skipping...', indent: true if options.verbose?
+                          warning "Oil “#{name}” already exists, skipping...", indent: true if options.verbose?
                         end
                       else
-                        error 'Oil is not valid, skipping...', indent: true if options.verbose?
+                        error "Oil “#{name}” is not valid, skipping...", indent: true if options.verbose?
 
                         oil_validator.errors.each do |error|
                           property = error.first
