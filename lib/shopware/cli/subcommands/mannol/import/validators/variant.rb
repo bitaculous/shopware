@@ -11,7 +11,6 @@ module Shopware
             class Variant < Validation::Validator
               include Validation
 
-              rule :number,          :numeric
               rule :supplier_number, :numeric
             end
           end
