@@ -99,7 +99,7 @@ module Shopware
 
                     ok 'Import finished.'
                   else
-                    error "File: `#{file}` not found." if options.verbose?
+                    error "File `#{file}` not found." if options.verbose?
                   end
                 end
 
