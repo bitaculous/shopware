@@ -226,7 +226,7 @@ module Shopware
                   spec_subcategories = oil.spec_subcategories
                   variants           = oil.variants
 
-                  number = generate_number text: name
+                  number = generate_number(text: name)
 
                   long_description = get_long_description_for_oil(oil: oil, options: options, defaults: defaults)
 

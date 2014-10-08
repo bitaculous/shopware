@@ -5,7 +5,7 @@ module Shopware
         module Import
           module Models
             class Variant
-              attr_accessor :number, :supplier_number, :content_value, :content_unit, :small_image, :big_image
+              attr_accessor :supplier_number, :content_value, :content_unit, :small_image, :big_image
 
               def content
                 content_value = self.content_value
