@@ -112,7 +112,7 @@ $ shopware variants delete <ID>
 
 ### Mannol
 
-#### Create oil property group
+#### Create an oil property group
 
 ```
 $ shopware mannol create_oil_property_group
