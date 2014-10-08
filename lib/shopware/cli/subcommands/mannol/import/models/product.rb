@@ -5,7 +5,7 @@ module Shopware
         module Import
           module Models
             class Product
-              attr_accessor :number, :name, :supplier
+              attr_accessor :name, :supplier
             end
           end
         end

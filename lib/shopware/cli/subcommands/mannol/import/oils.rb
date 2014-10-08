@@ -78,35 +78,7 @@ module Shopware
                           article = @client.create_article data
 
                           if article
-                            variants = oil.variants.sort_by { |variant| (variant.content_value || 0).to_f }
-
-                            variants.each do |variant|
-                              variant_validator = Validators::Variant.new variant
-
-                              if variant_validator.valid?
-                                data = get_variant_data_for_oil(
-                                  article: article,
-                                  variant: variant,
-                                  options: options,
-                                  defaults: defaults
-                                )
-
-                                variant = @client.create_variant data
-
-                                if not variant
-                                  error 'Uuuuuppppss, something went wrong while creating variant.', indent: true if options.verbose?
-                                end
-                              else
-                                error 'Variant is not valid, skipping...', indent: true if options.verbose?
-
-                                variant_validator.errors.each do |error|
-                                  property = error.first
-                                  label    = property.to_s.capitalize
-
-                                  error "#{label} not valid.", indent: true if options.verbose?
-                                end
-                              end
-                            end
+                            ok "Oil “#{name}” created."
                           else
                             error 'Uuuuuppppss, something went wrong while creating oil.', indent: true if options.verbose?
                           end
@@ -244,7 +216,6 @@ module Shopware
                 end
 
                 def get_article_data_for_oil(oil:, categories:, options:, defaults:)
-                  number             = oil.number
                   name               = oil.name
                   description        = oil.description
                   supplier           = oil.supplier
@@ -255,6 +226,8 @@ module Shopware
                   spec_subcategories = oil.spec_subcategories
                   variants           = oil.variants
 
+                  number = generate_number text: name
+
                   long_description = get_long_description_for_oil(oil: oil, options: options, defaults: defaults)
 
                   data = {
@@ -264,6 +237,7 @@ module Shopware
                     descriptionLong: long_description,
                     supplier: supplier,
                     tax: 19,
+                    active: true,
                     mainDetail: {
                       number: number,
                       propertyGroup: '2',
@@ -274,25 +248,15 @@ module Shopware
                         }
                       ]
                     },
-                    images: [],
                     filterGroupId: options.filter_group_id,
                     propertyValues: [],
-                    categories: [],
                     configuratorSet: {
                       groups: []
                     },
-                    active: true
+                    variants: [],
+                    images: [],
+                    categories: []
                   }
-
-                  image = find_image(
-                    small_image: small_image,
-                    big_image: big_image,
-                    options: options
-                  )
-
-                  if image
-                    data[:images] << { link: image }
-                  end
 
                   if not properties.empty?
                     properties.each do |property|
@@ -326,12 +290,6 @@ module Shopware
                     end
                   end
 
-                  if not categories.empty?
-                    categories.each do |category|
-                      data[:categories] << { id: category }
-                    end
-                  end
-
                   if not variants.empty?
                     content_configurator_set = {
                       name: defaults['content_configurator_set_name'],
@@ -341,12 +299,51 @@ module Shopware
                     variants = variants.sort_by { |variant| (variant.content_value || 0).to_f }
 
                     variants.each_with_index do |variant, index|
-                      option = variant.content
+                      variant_validator = Validators::Variant.new variant
 
-                      content_configurator_set[:options] << { name: option, position: index, shippingTime: 24 } if option
+                      if variant_validator.valid?
+                        variant_data = get_variant_data_for_oil(
+                          oil: oil,
+                          variant: variant,
+                          options: options,
+                          defaults: defaults,
+                          index: index
+                        )
+
+                        data[:variants] << variant_data if variant_data
+
+                        option = variant.content
+
+                        content_configurator_set[:options] << { name: option, position: index } if option
+                      else
+                        error 'Variant is not valid, skipping...', indent: true if options.verbose?
+
+                        variant_validator.errors.each do |error|
+                          property = error.first
+                          label    = property.to_s.capitalize
+
+                          error "#{label} not valid.", indent: true if options.verbose?
+                        end
+                      end
                     end
 
                     data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
+                  end
+
+                  image = find_image(
+                    small_image: small_image,
+                    big_image: big_image,
+                    options: options
+                  )
+
+                  if image
+                    data[:images] << { link: image }
+                  end
+
+                  if not categories.empty?
+                    categories.each do |category|
+                      data[:categories] << { id: category }
+                    end
                   end
 
                   data
@@ -376,9 +373,7 @@ module Shopware
                   description_long
                 end
 
-                def get_variant_data_for_oil(article:, variant:, options:, defaults:)
-                  article_id      = article['id']
-                  number          = variant.number
+                def get_variant_data_for_oil(oil:, variant:, options:, defaults:, index:)
                   supplier_number = variant.supplier_number
                   content         = variant.content
                   purchase_unit   = variant.purchase_unit
@@ -387,8 +382,11 @@ module Shopware
                   small_image     = variant.small_image
                   big_image       = variant.big_image
 
+                  number = generate_number text: oil.name, index: index
+
+                  is_main = index == 0
+
                   data = {
-                    articleId: article_id,
                     number: number,
                     supplierNumber: supplier_number,
                     additionaltext: content,
@@ -403,10 +401,18 @@ module Shopware
                         price: defaults['price']
                       }
                     ],
-                    images: [],
                     configuratorOptions: [],
+                    images: [],
+                    isMain: is_main,
                     active: true
                   }
+
+                  if content
+                    data[:configuratorOptions] << {
+                      group: defaults['content_configurator_set_name'],
+                      option: content
+                    }
+                  end
 
                   image = find_image(
                     small_image: small_image,
@@ -416,13 +422,6 @@ module Shopware
 
                   if image
                     data[:images] << { link: image }
-                  end
-
-                  if content
-                    data[:configuratorOptions] << {
-                      group: defaults['content_configurator_set_name'],
-                      option: content
-                    }
                   end
 
                   data

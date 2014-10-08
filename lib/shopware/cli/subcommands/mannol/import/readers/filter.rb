@@ -32,7 +32,6 @@ module Shopware
                   data: full
                 )
 
-                filter.number   = generate_number
                 filter.name     = name
                 filter.supplier = entity[:supplier]
 

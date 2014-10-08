@@ -38,13 +38,6 @@ module Shopware
             end
           end
 
-          def uri_exist?(uri)
-            request  = Net::HTTP.new uri.host, uri.port
-            response = request.request_head uri.path
-
-            response.code == '200'
-          end
-
           def find_or_create_category(name:, template:, parent_id:, text: nil)
             transient = @client.find_category_by_name name
 
@@ -95,8 +88,21 @@ module Shopware
             end
           end
 
+          def generate_number(text:, index: nil)
+            text = text.to_str.gsub(' ', '-').gsub('/', '-').upcase
+
+            index ? "#{text}.#{index}" : "#{text}"
+          end
+
           def enclose(text)
             "<p>#{text}</p>" if text
+          end
+
+          def uri_exist?(uri)
+            request  = Net::HTTP.new uri.host, uri.port
+            response = request.request_head uri.path
+
+            response.code == '200'
           end
         end
       end

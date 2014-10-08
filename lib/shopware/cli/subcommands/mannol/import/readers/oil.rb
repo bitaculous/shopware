@@ -35,7 +35,6 @@ module Shopware
                   data: full
                 )
 
-                oil.number       = generate_number
                 oil.name         = name
                 oil.code         = entity[:code]
                 oil.order_number = entity[:order_number]

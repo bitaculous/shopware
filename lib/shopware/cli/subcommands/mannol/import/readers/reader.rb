@@ -26,10 +26,6 @@ module Shopware
 
               private
 
-              def generate_number
-                SecureRandom.hex 10
-              end
-
               def search(criterions:)
                 matches = @csv.find_all do |row|
                   match = true

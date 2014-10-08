@@ -11,7 +11,6 @@ module Shopware
             class CareProduct < Validation::Validator
               include Validation
 
-              rule :number,       :not_empty
               rule :order_number, :numeric
               rule :name,         :not_empty
               rule :description,  :not_empty

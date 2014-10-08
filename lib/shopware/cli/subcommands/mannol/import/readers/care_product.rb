@@ -32,7 +32,6 @@ module Shopware
                   data: full
                 )
 
-                care_product.number        = generate_number
                 care_product.name          = name
                 care_product.order_number  = entity[:order_number]
                 care_product.description   = entity[:description]
