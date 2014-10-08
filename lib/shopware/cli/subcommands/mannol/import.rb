@@ -91,7 +91,7 @@ module Shopware
           def generate_number(text:, index: nil)
             text = text.to_str.gsub(' ', '-').gsub('/', '-').upcase
 
-            index ? "#{text}.#{index}" : "#{text}"
+            index ? "#{text}.#{index}" : text
           end
 
           def enclose(text)
