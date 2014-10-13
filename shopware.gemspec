@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage    = 'http://bitaculous.github.io/shopware'
   spec.version     = Shopware::VERSION
   spec.platform    = Gem::Platform::RUBY
-  spec.licenses    = 'MIT'
+  spec.license     = 'MIT'
 
   spec.files       = `git ls-files`.split($\)
   spec.executables = spec.files.grep(/^bin/).map { |file| File.basename file }
