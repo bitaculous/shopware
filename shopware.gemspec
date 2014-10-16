@@ -10,10 +10,9 @@ Gem::Specification.new do |spec|
   spec.summary     = 'A Ruby client for the Shopware API.'
   spec.author      = 'Maik Kempe'
   spec.email       = 'mkempe@bitaculous.com'
-  spec.homepage    = 'http://bitaculous.github.io/shopware'
-  spec.version     = Shopware::VERSION
-  spec.platform    = Gem::Platform::RUBY
+  spec.homepage    = 'https://bitaculous.github.io/shopware/'
   spec.license     = 'MIT'
+  spec.version     = Shopware::VERSION
 
   spec.files       = `git ls-files`.split($\)
   spec.executables = spec.files.grep(/^bin/).map { |file| File.basename file }
@@ -31,7 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'terminal-table', '~> 1.4.5'
 
-  spec.add_development_dependency 'bundler', '~> 1.7.3'
+  spec.add_development_dependency 'bundler', '~> 1.7'
 
   spec.add_development_dependency 'rake', '~> 10.3.2'
 
