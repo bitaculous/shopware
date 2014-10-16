@@ -44,7 +44,9 @@
 </code></pre>
 </li>
 <li><p>Run <code>bundle install</code></p></li>
-</ol><h2>
+</ol>
+
+<h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <ol>
@@ -54,11 +56,13 @@
 <div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">"api"</span>
   <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="s">"foobar"</span>
-  <span class="l-Scalar-Plain">base_uri</span><span class="p-Indicator">:</span> <span class="s">"http://your-awesome-shop.com/api"</span>
+  <span class="l-Scalar-Plain">uri</span><span class="p-Indicator">:</span> <span class="s">"http://your-awesome-shop.com/api"</span>
 </pre></div>
 </li>
-<li><p>Run <code>shopware --help</code> or <code>shopware help &lt;command&gt;</code></p></li>
-</ol><h3>
+<li><p>Run <code>shopware --help</code> or <code>shopware help &lt;COMMAND&gt;</code></p></li>
+</ol>
+
+<h3>
 <a name="articles" class="anchor" href="#articles"><span class="octicon octicon-link"></span></a>Articles</h3>
 
 <h4>
@@ -140,7 +144,7 @@
 <a name="mannol" class="anchor" href="#mannol"><span class="octicon octicon-link"></span></a>Mannol</h3>
 
 <h4>
-<a name="create-oil-property-group" class="anchor" href="#create-oil-property-group"><span class="octicon octicon-link"></span></a>Create oil property group</h4>
+<a name="create-an-oil-property-group" class="anchor" href="#create-an-oil-property-group"><span class="octicon octicon-link"></span></a>Create an oil property group</h4>
 
 <pre><code>$ shopware mannol create_oil_property_group
 </code></pre>
@@ -151,25 +155,25 @@
 <h5>
 <a name="import-oils-as-a-csv-file" class="anchor" href="#import-oils-as-a-csv-file"><span class="octicon octicon-link"></span></a>Import oils as a CSV file</h5>
 
-<pre><code>$ shopware mannol import_oils &lt;file&gt; --oil_category_id=&lt;oil_category_id&gt; --spec_category_id=&lt;spec_category_id&gt; --filter_group_id=&lt;filter-group-id&gt;
+<pre><code>$ shopware mannol import_oils &lt;FILE&gt; --oil_category_id=&lt;OIL_CATEGORY_ID&gt; --spec_category_id=&lt;SPEC_CATEGORY_ID&gt; --filter_group_id=&lt;FILTER_GROUP_ID&gt;
 
-$ shopware mannol import_oils &lt;file&gt; --oil_category_id=&lt;oil_category_id&gt; --spec_category_id=&lt;spec_category_id&gt; --filter_group_id=&lt;filter-group-id&gt; --number_of_oils=&lt;number_of_oils&gt; --verbose
+$ shopware mannol import_oils &lt;FILE&gt; --oil_category_id=&lt;OIL_CATEGORY_ID&gt; --spec_category_id=&lt;SPEC_CATEGORY_ID&gt; --filter_group_id=&lt;FILTER_GROUP_ID&gt; --number_of_oils=&lt;NUMBER_OF_OILS&gt; --verbose
 </code></pre>
 
 <h5>
 <a name="import-care-products-as-a-csv-file" class="anchor" href="#import-care-products-as-a-csv-file"><span class="octicon octicon-link"></span></a>Import care products as a CSV file</h5>
 
-<pre><code>$ shopware mannol import_car_products &lt;file&gt; --root_category_id=&lt;root_category_id&gt;
+<pre><code>$ shopware mannol import_car_products &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt;
 
-$ shopware mannol import_car_products &lt;file&gt; --root_category_id=&lt;root_category_id&gt; --number_of_care_products=&lt;number_of_care_products&gt; --verbose
+$ shopware mannol import_car_products &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt; --number_of_care_products=&lt;NUMBER_OF_CARE_PRODUCTS&gt; --verbose
 </code></pre>
 
 <h5>
 <a name="import-filters-as-a-csv-file" class="anchor" href="#import-filters-as-a-csv-file"><span class="octicon octicon-link"></span></a>Import filters as a CSV file</h5>
 
-<pre><code>$ shopware mannol filters &lt;file&gt; --root_category_id=&lt;root_category_id&gt;
+<pre><code>$ shopware mannol filters &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt;
 
-$ shopware mannol filters &lt;file&gt; --root_category_id=&lt;root_category_id&gt; --number_of_filters=&lt;number_of_filters&gt; --verbose
+$ shopware mannol filters &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt; --number_of_filters=&lt;NUMBER_OF_FILTERS&gt; --verbose
 </code></pre>
 
 <h2>
@@ -178,10 +182,10 @@ $ shopware mannol filters &lt;file&gt; --root_category_id=&lt;root_category_id&g
 <p>See <a href="https://github.com/bitaculous/shopware/blob/master/lib/shopware/api/client.rb" title="client.rub">client.rb</a>.</p>
 
 <h2>
-<a name="code-status" class="anchor" href="#code-status"><span class="octicon octicon-link"></span></a>Code status</h2>
+<a name="code-status" class="anchor" href="#code-status"><span class="octicon octicon-link"></span></a>Code Status</h2>
 
-<p><a href="https://travis-ci.org/bitaculous/shopware" title="Shopware at Travis CI"><img src="http://img.shields.io/travis/bitaculous/shopware.svg?style=flat" alt="Travis CI Status" title="Travis CI Status"></a>
-<a href="https://gemnasium.com/bitaculous/shopware" title="Shopware at Gemnasium"><img src="http://img.shields.io/gemnasium/bitaculous/shopware.svg?style=flat" alt="Gemnasium Status" title="Gemnasium Status"></a></p>
+<p><a href="https://travis-ci.org/bitaculous/shopware" title="Shopware at Travis CI"><img src="https://img.shields.io/travis/bitaculous/shopware.svg?style=flat" alt="Travis CI Status" title="Travis CI Status"></a>
+<a href="https://gemnasium.com/bitaculous/shopware" title="Shopware at Gemnasium"><img src="https://img.shields.io/gemnasium/bitaculous/shopware.svg?style=flat" alt="Gemnasium Status" title="Gemnasium Status"></a></p>
 
 <h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
