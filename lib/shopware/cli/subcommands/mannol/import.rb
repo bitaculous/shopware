@@ -88,8 +88,8 @@ module Shopware
             end
           end
 
-          def generate_number(text:, index: nil)
-            text = text.to_str.gsub(' ', '-').gsub('/', '-').upcase
+          def generate_number(text:, index: nil, separator: '-')
+            text = text.to_str.gsub(/[ \_\-\+\/]/, separator).upcase
 
             index ? "#{text}.#{index}" : text
           end
