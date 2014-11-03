@@ -24,8 +24,8 @@ module Shopware
                 option :number_of_oils, type: :numeric, default: -1
                 option :defaults, type: :hash, default: {
                   'price'                         => 999,
-                  'in_stock'                      => 15,
-                  'stockmin'                      => 1,
+                  'in_stock'                      => 0,
+                  'stockmin'                      => 5,
                   'content_configurator_set_name' => 'Inhalt',
                   'category_template'             => 'article_listing_1col.tpl',
                   'specifications_heading'        => 'Spezifikationen:'

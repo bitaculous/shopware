@@ -13,12 +13,12 @@ module Shopware
             def self.included(thor)
               thor.class_eval do
                 desc 'import_filters [FILE]', 'Import filters as a CSV file'
-                option :root_category_id, type: :numeric, required: true
+                option :filters_category_id, type: :numeric, required: true
                 option :number_of_filters, type: :numeric, default: -1
                 option :defaults, type: :hash, default: {
                   'price'             => 999,
-                  'in_stock'          => 15,
-                  'stockmin'          => 1,
+                  'in_stock'          => 0,
+                  'stockmin'          => 5,
                   'category_template' => 'article_listing_1col.tpl'
                 }
                 def import_filters(file)
@@ -103,7 +103,7 @@ module Shopware
                     category = find_or_create_category(
                       name: category,
                       template: defaults['category_template'],
-                      parent_id: options.root_category_id
+                      parent_id: options.filters_category_id
                     )
 
                     if category

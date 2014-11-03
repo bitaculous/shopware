@@ -13,15 +13,15 @@ module Shopware
             def self.included(thor)
               thor.class_eval do
                 desc 'import_care_products [FILE]', 'Import care products as a CSV file'
-                option :root_category_id, type: :numeric, required: true
+                option :car_products_category_id, type: :numeric, required: true
                 option :asset_host, type: :string, default: 'sct-catalogue.de'
                 option :small_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/small'
                 option :big_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/big'
                 option :number_of_care_products, type: :numeric, default: -1
                 option :defaults, type: :hash, default: {
                   'price'                         => 999,
-                  'in_stock'                      => 15,
-                  'stockmin'                      => 1,
+                  'in_stock'                      => 0,
+                  'stockmin'                      => 5,
                   'content_configurator_set_name' => 'Inhalt',
                   'category_template'             => 'article_listing_1col.tpl'
                 }
@@ -137,7 +137,7 @@ module Shopware
                     category = find_or_create_category(
                       name: category,
                       template: defaults['category_template'],
-                      parent_id: options.root_category_id
+                      parent_id: options.car_products_category_id
                     )
 
                     if category
