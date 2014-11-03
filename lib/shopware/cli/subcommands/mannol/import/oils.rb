@@ -15,7 +15,7 @@ module Shopware
             def self.included(thor)
               thor.class_eval do
                 desc 'import_oils [FILE]', 'Import oils as a CSV file'
-                option :oil_category_id, type: :numeric, required: true
+                option :root_category_id, type: :numeric, required: true
                 option :spec_category_id, type: :numeric, required: true
                 option :filter_group_id, type: :numeric, required: true
                 option :asset_host, type: :string, default: 'sct-catalogue.de'
@@ -114,7 +114,7 @@ module Shopware
                     category = find_or_create_category(
                       name: category,
                       template: defaults['category_template'],
-                      parent_id: options.oil_category_id
+                      parent_id: options.root_category_id
                     )
 
                     if category

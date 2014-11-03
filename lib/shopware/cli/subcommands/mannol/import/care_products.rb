@@ -13,7 +13,7 @@ module Shopware
             def self.included(thor)
               thor.class_eval do
                 desc 'import_care_products [FILE]', 'Import care products as a CSV file'
-                option :car_products_category_id, type: :numeric, required: true
+                option :root_category_id, type: :numeric, required: true
                 option :asset_host, type: :string, default: 'sct-catalogue.de'
                 option :small_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/small'
                 option :big_image_path, type: :string, default: '/imgbank/Image/public/images/bilder_chemie/big'
@@ -73,43 +73,15 @@ module Shopware
                           article = @client.create_article data
 
                           if article
-                            variants = care_product.variants.sort_by { |variant| (variant.content_value || 0).to_f }
-
-                            variants.each do |variant|
-                              variant_validator = Validators::Variant.new variant
-
-                              if variant_validator.valid?
-                                data = get_variant_data_for_care_product(
-                                  article: article,
-                                  variant: variant,
-                                  options: options,
-                                  defaults: defaults
-                                )
-
-                                variant = @client.create_variant data
-
-                                if not variant
-                                  error 'Uuuuuppppss, something went wrong while creating variant.', indent: true if options.verbose?
-                                end
-                              else
-                                error 'Variant is not valid, skipping...', indent: true if options.verbose?
-
-                                variant_validator.errors.each do |error|
-                                  property = error.first
-                                  label    = property.to_s.capitalize
-
-                                  error "#{label} not valid.", indent: true if options.verbose?
-                                end
-                              end
-                            end
+                            ok "Care product “#{name}” created.", indent: true
                           else
-                            error 'Uuuuuppppss, something went wrong while creating oil.', indent: true if options.verbose?
+                            error "Uuuuuppppss, something went wrong while creating care product “#{name}”.", indent: true if options.verbose?
                           end
                         else
-                          warning 'Care product already exists, skipping...', indent: true if options.verbose?
+                          warning "Care product “#{name}” already exists, skipping...", indent: true if options.verbose?
                         end
                       else
-                        error 'Care product is not valid, skipping...', indent: true if options.verbose?
+                        error "Care product “#{name}” is not valid, skipping...", indent: true if options.verbose?
 
                         care_product_validator.errors.each do |error|
                           property = error.first
@@ -137,7 +109,7 @@ module Shopware
                     category = find_or_create_category(
                       name: category,
                       template: defaults['category_template'],
-                      parent_id: options.car_products_category_id
+                      parent_id: options.root_category_id
                     )
 
                     if category
@@ -167,7 +139,6 @@ module Shopware
                 end
 
                 def get_article_data_for_care_product(care_product:, categories:, options:, defaults:)
-                  number      = care_product.number
                   name        = care_product.name
                   description = care_product.description
                   instruction = care_product.instruction
@@ -175,6 +146,8 @@ module Shopware
                   small_image = care_product.small_image
                   big_image   = care_product.big_image
                   variants    = care_product.variants
+
+                  number = generate_number(text: name)
 
                   long_description = enclose description
 
@@ -191,6 +164,7 @@ module Shopware
                     descriptionLong: long_description,
                     supplier: supplier,
                     tax: 19,
+                    active: true,
                     mainDetail: {
                       number: number,
                       propertyGroup: '2',
@@ -201,13 +175,53 @@ module Shopware
                         }
                       ]
                     },
-                    images: [],
-                    categories: [],
                     configuratorSet: {
                       groups: []
                     },
-                    active: true
+                    variants: [],
+                    images: [],
+                    categories: []
                   }
+
+                  if not variants.empty?
+                    content_configurator_set = {
+                      name: defaults['content_configurator_set_name'],
+                      options: []
+                    }
+
+                    variants = variants.sort_by { |variant| (variant.content_value || 0).to_f }
+
+                    variants.each_with_index do |variant, index|
+                      variant_validator = Validators::Variant.new variant
+
+                      if variant_validator.valid?
+                        variant_data = get_variant_data_for_care_product(
+                          care_product: care_product,
+                          variant: variant,
+                          options: options,
+                          defaults: defaults,
+                          index: index
+                        )
+
+                        data[:variants] << variant_data if variant_data
+
+                        option = variant.content
+
+                        content_configurator_set[:options] << { name: option, position: index } if option
+                      else
+                        error 'Variant is not valid, skipping...', indent: true if options.verbose?
+
+                        variant_validator.errors.each do |error|
+                          property = error.first
+                          label    = property.to_s.capitalize
+
+                          error "#{label} not valid.", indent: true if options.verbose?
+                        end
+                      end
+                    end
+
+                    data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
+                  end
 
                   image = find_image(
                     small_image: small_image,
@@ -225,29 +239,10 @@ module Shopware
                     end
                   end
 
-                  if not variants.empty?
-                    content_configurator_set = {
-                      name: defaults['content_configurator_set_name'],
-                      options: []
-                    }
-
-                    variants = variants.sort_by { |variant| (variant.content_value || 0).to_f }
-
-                    variants.each_with_index do |variant, index|
-                      option = variant.content
-
-                      content_configurator_set[:options] << { name: option, position: index } if option
-                    end
-
-                    data[:configuratorSet][:groups] << content_configurator_set if content_configurator_set
-                  end
-
                   data
                 end
 
-                def get_variant_data_for_care_product(article:, variant:, options:, defaults:)
-                  article_id      = article['id']
-                  number          = variant.number
+                def get_variant_data_for_care_product(care_product:, variant:, options:, defaults:, index:)
                   supplier_number = variant.supplier_number
                   content         = variant.content
                   purchase_unit   = variant.purchase_unit
@@ -256,8 +251,11 @@ module Shopware
                   small_image     = variant.small_image
                   big_image       = variant.big_image
 
+                  number = generate_number text: care_product.name, index: index
+
+                  is_main = index == 0
+
                   data = {
-                    articleId: article_id,
                     number: number,
                     supplierNumber: supplier_number,
                     additionaltext: content,
@@ -272,10 +270,18 @@ module Shopware
                         price: defaults['price']
                       }
                     ],
-                    images: [],
                     configuratorOptions: [],
+                    images: [],
+                    isMain: is_main,
                     active: true
                   }
+
+                  if content
+                    data[:configuratorOptions] << {
+                      group: defaults['content_configurator_set_name'],
+                      option: content
+                    }
+                  end
 
                   image = find_image(
                     small_image: small_image,
@@ -285,13 +291,6 @@ module Shopware
 
                   if image
                     data[:images] << { link: image }
-                  end
-
-                  if content
-                    data[:configuratorOptions] << {
-                      group: defaults['content_configurator_set_name'],
-                      option: content
-                    }
                   end
 
                   data

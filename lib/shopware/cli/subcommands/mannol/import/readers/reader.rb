@@ -14,7 +14,7 @@ module Shopware
                 options = {
                   headers: :first_row,
                   header_converters: :symbol,
-                  converters: [:numeric, :float],
+                  converters: [],
                   col_sep: column_separator,
                   quote_char: quote_character
                 }

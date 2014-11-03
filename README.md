@@ -123,9 +123,9 @@ $ shopware mannol create_oil_property_group
 ##### Import oils as a CSV file
 
 ```
-$ shopware mannol import_oils <FILE> --oil_category_id=<OIL_CATEGORY_ID> --spec_category_id=<SPEC_CATEGORY_ID> --filter_group_id=<FILTER_GROUP_ID>
+$ shopware mannol import_oils <FILE> --root_category_id=<ROOT_CATEGORY_ID> --spec_category_id=<SPEC_CATEGORY_ID> --filter_group_id=<FILTER_GROUP_ID>
 
-$ shopware mannol import_oils <FILE> --oil_category_id=<OIL_CATEGORY_ID> --spec_category_id=<SPEC_CATEGORY_ID> --filter_group_id=<FILTER_GROUP_ID> --number_of_oils=<NUMBER_OF_OILS> --verbose
+$ shopware mannol import_oils <FILE> --root_category_id=<ROOT_CATEGORY_ID> --spec_category_id=<SPEC_CATEGORY_ID> --filter_group_id=<FILTER_GROUP_ID> --number_of_oils=<NUMBER_OF_OILS> --verbose
 ```
 
 ##### Import care products as a CSV file
