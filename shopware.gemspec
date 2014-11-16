@@ -5,14 +5,12 @@ $:.unshift lib unless $:.include? lib
 
 require 'shopware/version'
 
-Gem::Specification.new do |spec|
-  spec.name        = 'shopware'
+Gem::Specification.new 'shopware', Shopware::VERSION do |spec|
   spec.summary     = 'A Ruby client for the Shopware API.'
   spec.author      = 'Maik Kempe'
   spec.email       = 'mkempe@bitaculous.com'
   spec.homepage    = 'https://bitaculous.github.io/shopware/'
   spec.license     = 'MIT'
-  spec.version     = Shopware::VERSION
 
   spec.files       = `git ls-files`.split($\)
   spec.executables = spec.files.grep(/^bin/).map { |file| File.basename file }
