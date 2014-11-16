@@ -5,4 +5,5 @@
 /data/
 /Gemfile.lock
 /pkg/
+/tmp/
 /shopware.sublime-workspace
