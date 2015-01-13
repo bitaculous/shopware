@@ -9,10 +9,10 @@ require 'shopware/cli/subcommands/mannol_subcommand'
 module Shopware
   module CLI
     class Runner < Thor
-      class_option :verbose, type: :boolean, default: false, aliases: '-v'
-
       include Thor::Actions
       include Thor::Shell
+
+      class_option :verbose, type: :boolean, default: false, aliases: '-v'
 
       desc 'articles [SUBCOMMAND]', 'Manage articles'
       subcommand :articles, Subcommands::ArticlesSubcommand
