@@ -11,8 +11,8 @@ Gem::Specification.new 'shopware', Shopware::VERSION do |spec|
   spec.email            = 'mkempe@bitaculous.com'
   spec.homepage         = 'https://bitaculous.github.io/shopware/'
   spec.license          = 'MIT'
-  spec.files            = `git ls-files`.split($\)
-  spec.executables      = spec.files.grep(/^bin/).map { |file| File.basename file }
+  spec.files            = Dir['{bin,lib}/**/*', '.shopware.sample', 'LICENSE', 'README.md']
+  spec.executables      = ['shopware']
   spec.extra_rdoc_files = ['LICENSE', 'README.md']
 
   spec.required_ruby_version     = '~> 2.1'
