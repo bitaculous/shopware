@@ -1,10 +1,9 @@
 [Shopware]
 ==========
 
-**A Ruby client for the Shopware API.**
+[![Travis CI Status][Travis CI Status]][Travis CI] [![Gemnasium Status][Gemnasium Status]][Gemnasium]
 
-[![Travis CI Status][Travis CI Status]][Travis CI]
-[![Gemnasium Status][Gemnasium Status]][Gemnasium]
+**A Ruby client for the Shopware API.**
 
 Warning
 -------
@@ -149,6 +148,23 @@ Client
 
 See [client.rb].
 
+Development
+-----------
+
+### Specs
+
+Use the `rspec` command to run the specs:
+
+```
+$ rspec
+```
+
+or via [Guard]:
+
+```
+$ guard -g spec
+```
+
 Bug Reports
 -----------
 
@@ -170,6 +186,7 @@ Shopware is released under the [MIT License (MIT)], see [LICENSE].
 [client.rb]: https://github.com/bitaculous/shopware/blob/master/lib/shopware/api/client.rb "client.rub"
 [Gemnasium]: https://gemnasium.com/bitaculous/shopware "Shopware at Gemnasium"
 [Gemnasium Status]: https://img.shields.io/gemnasium/bitaculous/shopware.svg?style=flat "Gemnasium Status"
+[Guard]: http://guardgem.org "A command line tool to easily handle events on file system modifications."
 [here]: https://github.com/bitaculous/shopware/issues "Github Issues"
 [LICENSE]: https://raw.githubusercontent.com/bitaculous/shopware/master/LICENSE "License"
 [MIT License (MIT)]: http://opensource.org/licenses/MIT "The MIT License (MIT)"
