@@ -15,17 +15,10 @@ module Shopware
         end
 
         def find_article_by_name(name)
-          response = self.class.get '/articles'
-
-          if response['success']
-            articles = response['data']
-
-            articles.each do |article|
-              return article if article['name'] == name
-            end
-          end
-
-          nil
+          filter = "filter[0][property]=name&filter[0][expression]=%3D&filter[0][value]=#{name}"
+          response = self.class.get '/articles', { query: filter }
+          
+          response['data'].empty? ? nil : response['data'].first
         end
 
         def create_article(properties)
