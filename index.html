@@ -6,7 +6,7 @@
     <title>Shopware by bitaculous</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -53,10 +53,10 @@
 <li>
 <p>Create a <code>.shopware</code> config file:</p>
 
-<div class="highlight highlight-yml"><pre><span class="pl-s1"><span class="pl-ent">api:</span></span>
-  <span class="pl-s1"><span class="pl-ent">username:</span> <span class="pl-s1"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span></span>
-  <span class="pl-s1"><span class="pl-ent">key:</span> <span class="pl-s1"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span></span>
-  <span class="pl-s1"><span class="pl-ent">uri:</span> <span class="pl-s1"><span class="pl-pds">"</span>http://your-awesome-shop.com/api<span class="pl-pds">"</span></span></span></pre></div>
+<div class="highlight highlight-yml"><pre><span class="pl-s"><span class="pl-ent">api:</span></span>
+  <span class="pl-s"><span class="pl-ent">username:</span> <span class="pl-s"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span></span>
+  <span class="pl-s"><span class="pl-ent">key:</span> <span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span></span>
+  <span class="pl-s"><span class="pl-ent">uri:</span> <span class="pl-s"><span class="pl-pds">"</span>http://your-awesome-shop.com/api<span class="pl-pds">"</span></span></span></pre></div>
 </li>
 <li><p>Run <code>shopware --help</code> or <code>shopware help &lt;COMMAND&gt;</code></p></li>
 </ol>
@@ -137,42 +137,6 @@
 <a id="delete-variant" class="anchor" href="#delete-variant" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete variant</h4>
 
 <pre><code>$ shopware variants delete &lt;ID&gt;
-</code></pre>
-
-<h3>
-<a id="mannol" class="anchor" href="#mannol" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mannol</h3>
-
-<h4>
-<a id="create-an-oil-property-group" class="anchor" href="#create-an-oil-property-group" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create an oil property group</h4>
-
-<pre><code>$ shopware mannol create_oil_property_group
-</code></pre>
-
-<h4>
-<a id="imports" class="anchor" href="#imports" aria-hidden="true"><span class="octicon octicon-link"></span></a>Imports</h4>
-
-<h5>
-<a id="import-oils-as-a-csv-file" class="anchor" href="#import-oils-as-a-csv-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Import oils as a CSV file</h5>
-
-<pre><code>$ shopware mannol import_oils &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt; --spec_category_id=&lt;SPEC_CATEGORY_ID&gt; --filter_group_id=&lt;FILTER_GROUP_ID&gt;
-
-$ shopware mannol import_oils &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt; --spec_category_id=&lt;SPEC_CATEGORY_ID&gt; --filter_group_id=&lt;FILTER_GROUP_ID&gt; --number_of_oils=&lt;NUMBER_OF_OILS&gt; --verbose
-</code></pre>
-
-<h5>
-<a id="import-care-products-as-a-csv-file" class="anchor" href="#import-care-products-as-a-csv-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Import care products as a CSV file</h5>
-
-<pre><code>$ shopware mannol import_car_products &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt;
-
-$ shopware mannol import_car_products &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt; --number_of_care_products=&lt;NUMBER_OF_CARE_PRODUCTS&gt; --verbose
-</code></pre>
-
-<h5>
-<a id="import-filters-as-a-csv-file" class="anchor" href="#import-filters-as-a-csv-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Import filters as a CSV file</h5>
-
-<pre><code>$ shopware mannol filters &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt;
-
-$ shopware mannol filters &lt;FILE&gt; --root_category_id=&lt;ROOT_CATEGORY_ID&gt; --number_of_filters=&lt;NUMBER_OF_FILTERS&gt; --verbose
 </code></pre>
 
 <h2>
