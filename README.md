@@ -109,6 +109,40 @@ $ shopware variants show <ID>
 $ shopware variants delete <ID>
 ```
 
+### Mannol
+
+#### Create an oil property group
+
+```
+$ shopware mannol create_oil_property_group
+```
+
+#### Imports
+
+##### Import oils as a CSV file
+
+```
+$ shopware mannol import_oils <FILE> --root_category_id=<ROOT_CATEGORY_ID> --spec_category_id=<SPEC_CATEGORY_ID> --filter_group_id=<FILTER_GROUP_ID>
+
+$ shopware mannol import_oils <FILE> --root_category_id=<ROOT_CATEGORY_ID> --spec_category_id=<SPEC_CATEGORY_ID> --filter_group_id=<FILTER_GROUP_ID> --number_of_oils=<NUMBER_OF_OILS> --verbose
+```
+
+##### Import care products as a CSV file
+
+```
+$ shopware mannol import_car_products <FILE> --root_category_id=<ROOT_CATEGORY_ID>
+
+$ shopware mannol import_car_products <FILE> --root_category_id=<ROOT_CATEGORY_ID> --number_of_care_products=<NUMBER_OF_CARE_PRODUCTS> --verbose
+```
+
+##### Import filters as a CSV file
+
+```
+$ shopware mannol filters <FILE> --root_category_id=<ROOT_CATEGORY_ID>
+
+$ shopware mannol filters <FILE> --root_category_id=<ROOT_CATEGORY_ID> --number_of_filters=<NUMBER_OF_FILTERS> --verbose
+```
+
 Client
 ------
 
