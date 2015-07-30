@@ -15,17 +15,10 @@ module Shopware
         end
 
         def find_category_by_name(name)
-          response = self.class.get '/categories'
+          filter   = "filter[0][property]=name&filter[0][expression]=%3D&filter[0][value]=#{name}"
+          response = self.class.get '/categories', { query: filter }
 
-          if response['success']
-            categories = response['data']
-
-            categories.each do |category|
-              return category if category['name'] == name
-            end
-          end
-
-          nil
+          response['data'].empty? ? nil : response['data'].first
         end
 
         def create_category(properties)
