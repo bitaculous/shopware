@@ -3,7 +3,7 @@
 
 [![Travis CI Status][Travis CI Status]][Travis CI] [![Gemnasium Status][Gemnasium Status]][Gemnasium]
 
-**[Ruby] API client and CLI for Shopware.**
+**[Ruby] API client and CLI for Shopware**
 
 Warning
 -------
@@ -158,6 +158,6 @@ Shopware is released under the [MIT License (MIT)], see [LICENSE].
 [MIT License (MIT)]: http://opensource.org/licenses/MIT "The MIT License (MIT)"
 [Ruby]: https://www.ruby-lang.org "A dynamic, open source programming language with a focus on simplicity and productivity."
 [Semantic Versioning 2.0.0]: http://semver.org "Semantic Versioning 2.0.0"
-[Shopware]: https://bitaculous.github.io/shopware/ "Ruby API client and CLI for Shopware."
+[Shopware]: https://bitaculous.github.io/shopware/ "Ruby API client and CLI for Shopware"
 [Travis CI]: https://travis-ci.org/bitaculous/shopware "Shopware at Travis CI"
 [Travis CI Status]: https://img.shields.io/travis/bitaculous/shopware.svg?style=flat "Travis CI Status"

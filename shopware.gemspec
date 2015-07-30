@@ -6,7 +6,7 @@ $:.unshift lib unless $:.include? lib
 require 'shopware/version'
 
 Gem::Specification.new 'shopware', Shopware::VERSION do |spec|
-  spec.summary          = 'A Ruby client for the Shopware API.'
+  spec.summary          = 'Ruby API client and CLI for Shopware'
   spec.author           = 'Maik Kempe'
   spec.email            = 'mkempe@bitaculous.com'
   spec.homepage         = 'https://bitaculous.github.io/shopware/'
